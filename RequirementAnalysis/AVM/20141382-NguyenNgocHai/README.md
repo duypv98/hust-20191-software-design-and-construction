@@ -5,6 +5,8 @@
 **Nội dung Review: Đặc tả UC003 - Mua thẻ trả trước**
 ---
 Đầy đủ các phần cần thiết trong đặc tả usecase, không có lỗi sai ở các phần
+
+
 **Nội dung Review: Đặc tả UC005 - Thanh toán**
 ---
 Đầy đủ các phần cần thiết trong đặc tả usecase
