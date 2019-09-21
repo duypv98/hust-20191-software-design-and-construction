@@ -1,3 +1,4 @@
-## README.md
----
-Please edit README.md file in each directory of this repository
+Nguyễn Ngọc Hải - 20141382
+
+Đặc tả usecase UC003 "Mua thẻ trả trước"
+Đặc tả usecase UC005 "Thanh toán"
