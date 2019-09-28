@@ -16,3 +16,7 @@ Phân công:
 - Việt Duy: Tính dùng được.
 - Văn Duy: Tính tin cậy.
 - Ngọc Hải: Hiệu năng + Khả năng hỗ trợ.
+4. Phân công review:
+- Thành Duy cho Ngọc Hải và Văn Duy.
+- Ngọc Hải cho Thành Duy.
+- Văn Duy cho Việt Duy.
