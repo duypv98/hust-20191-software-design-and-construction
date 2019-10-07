@@ -2,4 +2,5 @@
 ---
 Please edit README.md file in each directory of this repository
 ---
-Làm rất tốt và đầy đủ
+Sequence Diagram: Khách hàng và máy nhận diện vé giao tiếp với nhau nằm ngoài hệ thống nên chúng ta không cần xem xét.
+Biểu đồ lớp: Một số liên kết chưa đúng. Có thể bỏ actor.
