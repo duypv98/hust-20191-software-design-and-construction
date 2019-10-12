@@ -1,7 +1,14 @@
 ## README.md
+
 ---
 
-ABC review:
-1. UI
-2. Class Desgin
-3. Data Modeling
+Thành Duy review:
+
+1. UI:
+
+- Giao diện invalid bị sai tên ga ở phía trên (lẽ ra là 1 ga nào đó ngoài khoảng ghi trên vé).
+- Giao diện còn lại hợp lí.
+
+2. Class Design:
+
+- Thiết kế hợp lí.
