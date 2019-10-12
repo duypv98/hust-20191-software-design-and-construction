@@ -1,3 +1,7 @@
 ## README.md
 ---
-Please edit README.md file in each directory of this repository
+
+ABC review:
+1. UI
+2. Class Desgin
+3. Data Modeling
