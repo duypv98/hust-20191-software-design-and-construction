@@ -16,11 +16,14 @@ import vn.edu.hust.soict.afc.entities.OneWayTicket;
  */
 public class OWTicketService {
 
-	/**
-	 * 
-	 */
 	private static BaseDataClient client = new BaseDataClient();
 
+	/**
+	 * 
+	 * @param ticketCode
+	 * @return OneWayTicket
+	 * @throws SQLException
+	 */
 	public static OneWayTicket getTicketInfo(String ticketCode) throws SQLException {
 		OneWayTicket owt = null;
 		String sql = "SELECT id, embarkation_id, disembarkation_id, checked_in, fare, activated FROM oneway_ticket WHERE ticket_code = ?";
@@ -40,7 +43,7 @@ public class OWTicketService {
 			owt.setFare(rs.getDouble("fare"));
 			owt.setActivated(rs.getBoolean("activated"));
 		}
-
+//		client.close();
 		return owt;
 	}
 

@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="E:/Workspace/Java/AFC System/lib/cardscanner.jar"/>
-	<classpathentry kind="lib" path="E:/Workspace/Java/AFC System/lib/gate.jar"/>
-	<classpathentry kind="lib" path="E:/Workspace/Java/AFC System/lib/ticketrecognizer.jar"/>
-	<classpathentry kind="lib" path="E:/Workspace/Java/AFC System/lib/mysql-connector-java-8.0.18.jar"/>
+	<classpathentry kind="lib" path="E:/Git/tkxdpm.20191-04/Construction/Coding/AFC System/lib/cardscanner.jar"/>
+	<classpathentry kind="lib" path="E:/Git/tkxdpm.20191-04/Construction/Coding/AFC System/lib/gate.jar"/>
+	<classpathentry kind="lib" path="E:/Git/tkxdpm.20191-04/Construction/Coding/AFC System/lib/ticketrecognizer.jar"/>
+	<classpathentry kind="lib" path="E:/Git/tkxdpm.20191-04/Construction/Coding/AFC System/lib/mysql-connector-java-8.0.18.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
