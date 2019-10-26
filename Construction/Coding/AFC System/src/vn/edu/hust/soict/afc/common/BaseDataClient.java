@@ -1,12 +1,6 @@
 /**
-* @author Professor
-* @created_at 24 Oct 2019
-* @project_name AFC_System
-* @lecturer Nguyen Thi Thu Trang
-* @class_id 111589
-*
-* @description Java Project for Automated Fare Collection Simulation
-*/
+ * 
+ */
 package vn.edu.hust.soict.afc.common;
 
 import java.sql.Connection;
@@ -17,37 +11,36 @@ import java.sql.SQLException;
  * @author Professor
  *
  */
-public class BaseDBConnector {
-	
-	// JDBC Driver name and Database URL
-	private static String DRIVER = "com.mysql.cj.jdbc.Driver";
-	private static String DB_URL = "jdbc:mysql://localhost:3306/afc";
-	// Database Credentials
-	private static String DB_USER = "";
-	private static String DB_PWD = "";
-	// Database Connection
-	public Connection connection = null;
-	
+public class BaseDataClient {
+
 	/**
-	 * @throws ClassNotFoundException 
 	 * 
 	 */
-	public BaseDBConnector() throws ClassNotFoundException {
-		// TODO Auto-generated constructor stub
+	private static String DRIVER = "com.mysql.cj.jdbc.Driver";
+
+	private static String DB_URL = "jdbc:mysql://localhost:3306/afc";
+	private static String DB_USER = "root";
+	private static String DB_PWD = "admin1";
+
+	public Connection connection = null;
+
+	/**
+	 * 
+	 * 
+	 */
+	public BaseDataClient() {
 		try {
 			Class.forName(DRIVER);
-			System.out.println("Created DB Connection....");
 		} catch (ClassNotFoundException e) {
+			System.err.println("Driver not found !");
 			e.printStackTrace();
-			throw e;
 		}
 	}
-	
+
 	/**
-	 * @throws SQLException 
+	 * @throws SQLException
 	 * 
 	 */
-	
 	public void open() throws SQLException {
 		try {
 			if (this.connection == null) {
@@ -58,7 +51,7 @@ public class BaseDBConnector {
 			throw e;
 		}
 	}
-	
+
 	/**
 	 * @throws SQLException
 	 * 
@@ -67,9 +60,17 @@ public class BaseDBConnector {
 		try {
 			if (this.connection != null) {
 				this.connection.close();
-			} }catch (SQLException e) {
-				e.printStackTrace();
-				throw e;
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
 		}
 	}
+
+	/**
+	 * @return the connection
+	 */
+	public Connection getConnection() {
+		return this.connection;
+	}
+}
