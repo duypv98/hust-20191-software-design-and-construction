@@ -1,0 +1,1 @@
+Open the xxx/doc/index.html for helping to use the SDK

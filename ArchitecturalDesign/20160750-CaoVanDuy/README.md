@@ -1,4 +1,5 @@
 ## README.md
 ---
-Nên đặt tên phương thức tương ứng với thông điệp của các lớp "Giao diện của máy quét thẻ", và đặt tên lớp không dấu
-Biểu đồ lớp cần chỉ rõ actor nào tác động lên lớp, association của các lớp
+Việt Duy review Văn Duy:
+Biểu đồ tuần tự: Đúng, chi tiết các luồng thay thế.
+Biểu đồ lớp: Đủ các lớp như yêu cầu.
