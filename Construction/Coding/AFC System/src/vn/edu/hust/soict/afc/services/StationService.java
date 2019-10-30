@@ -6,6 +6,8 @@ package vn.edu.hust.soict.afc.services;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import vn.edu.hust.soict.afc.common.BaseDataClient;
 import vn.edu.hust.soict.afc.entities.Station;
@@ -42,5 +44,23 @@ public class StationService {
 
 //		client.close();
 		return station;
+	}
+	
+	public static List<Station> getAllStations() throws SQLException {
+		List<Station> rList = new ArrayList<>();
+		String sql = "SELECT id, station_name, distance FROM station";
+		client.open();
+		PreparedStatement ps = client.getConnection().prepareStatement(sql);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {
+			Station st = new Station();
+			st.setId(rs.getInt("id"));
+			st.setStationName(rs.getString("station_name"));
+			st.setDistance(rs.getDouble("distance"));
+
+			rList.add(st);
+		}
+		return rList;
 	}
 }

@@ -3,9 +3,11 @@
  */
 package vn.edu.hust.soict.afc.controllers;
 
+import java.awt.EventQueue;
 import java.sql.SQLException;
 
 import hust.soict.se.customexception.InvalidIDException;
+import vn.edu.hust.soict.afc.boundaries.MainGUI;
 import vn.edu.hust.soict.afc.boundaries.TicketRecognizerBoundary;
 import vn.edu.hust.soict.afc.entities.OneWayTicket;
 import vn.edu.hust.soict.afc.entities.Station;
@@ -79,6 +81,18 @@ public class MainApp {
 	public static void main(String[] args) {
 		MainApp mainApp = new MainApp();
 		mainApp.start();
+		EventQueue.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					MainGUI mainFrame = new MainGUI();
+					mainFrame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 }
