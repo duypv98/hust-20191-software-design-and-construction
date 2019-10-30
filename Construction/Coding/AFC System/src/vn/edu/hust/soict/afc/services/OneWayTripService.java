@@ -44,4 +44,27 @@ public class OneWayTripService {
 		return oneWayTrip;
 	}
 	
+	public static void insertTrip(String ticketId, int incomeStationId, Timestamp incomeTime, int outcomeStationId,
+			Timestamp outcomeTime, double realFare, boolean onTrip) throws SQLException {
+		int onTripInt = 0;
+		
+		if(onTrip) {
+			onTripInt = 1;
+		}
+		
+        String sql = "INSERT INTO oneway_trip (ticket_id, income_station_id, income_time, outcome_station_id, outcome_time, real_fare, ontrip)"
+        		+ "VALUES('" 
+        		+ ticketId + "', '"
+        		+ incomeStationId + "', '"
+        		+ incomeTime + "', '"
+        		+ outcomeStationId + "', '"
+        		+ outcomeTime + "', '"
+        		+ realFare + "', '"
+        		+ onTripInt + "')";
+        
+        client.open();
+		PreparedStatement ps = client.getConnection().prepareStatement(sql);
+		ps.executeUpdate();
+    }
+	
 }
