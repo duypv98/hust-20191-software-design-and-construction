@@ -67,4 +67,33 @@ public class OneWayTripService {
 		ps.executeUpdate();
     }
 	
+	public static void updateTrip(int id, int outcomeStationId, Timestamp outcomeTime, double realFare, boolean onTrip) 
+			throws SQLException {
+		int onTripInt = 0;
+		
+		if(onTrip) {
+			onTripInt = 1;
+		}
+		
+        String sql = "UPDATE oneway_trip SET " 
+	    		+ "outcome_station_id='" + outcomeStationId + "', "
+	    		+ "outcome_time='" + outcomeTime + "', "
+	    		+ "real_fare='" + realFare + "', "
+	    		+ "ontrip='" + onTripInt + "' WHERE "
+	    		+ "id='" + id + "'";
+        
+        client.open();
+		PreparedStatement ps = client.getConnection().prepareStatement(sql);
+		ps.executeUpdate();
+    }
+	
+	public static void main(String[] args) throws SQLException {
+//		Timestamp incomeTime = new Timestamp(new Date().getTime());
+//		Timestamp outcomeTime = new Timestamp(new Date().getTime() + 3600000);
+//		
+//		insertTrip("OW201910300000", 1, incomeTime, 3, outcomeTime, 10.0, true);
+		OneWayTrip trip = getTripInfo(1);
+		updateTrip(1, trip.getOutcomeStationId(), trip.getOutcomeTime(), 12.0, false);
+	}
+
 }
