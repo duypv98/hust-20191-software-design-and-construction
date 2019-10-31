@@ -24,26 +24,28 @@ public class OWTicketService {
 	 * @return OneWayTicket
 	 * @throws SQLException
 	 */
-	public static OneWayTicket getTicketInfo(String ticketCode) throws SQLException {
+	public static OneWayTicket getTicketInfo(String ticketId) {
 		OneWayTicket owt = null;
-		String sql = "SELECT id, embarkation_id, disembarkation_id, checked_in, fare, activated FROM oneway_ticket WHERE ticket_code = ?";
+		String sql = "SELECT embarkation_id, disembarkation_id, checked_in, fare, activated FROM oneway_ticket WHERE id = ?";
+		try {
+			client.open();
+			PreparedStatement ps = client.getConnection().prepareStatement(sql);
+			ps.setString(1, ticketId);
 
-		client.open();
-		PreparedStatement ps = client.getConnection().prepareStatement(sql);
-		ps.setString(1, ticketCode);
+			ResultSet rs = ps.executeQuery();
 
-		ResultSet rs = ps.executeQuery();
-
-		if (rs.first()) {
-			owt = new OneWayTicket();
-			owt.setId(rs.getString("id"));
-			owt.setEmbarkationId(rs.getInt("embarkation_id"));
-			owt.setDisembarkationId(rs.getInt("disembarkation_id"));
-			owt.setCheckedIn(rs.getBoolean("checked_in"));
-			owt.setFare(rs.getDouble("fare"));
-			owt.setActivated(rs.getBoolean("activated"));
+			if (rs.first()) {
+				owt = new OneWayTicket();
+				owt.setId(ticketId);
+				owt.setEmbarkationId(rs.getInt("embarkation_id"));
+				owt.setDisembarkationId(rs.getInt("disembarkation_id"));
+				owt.setCheckedIn(rs.getBoolean("checked_in"));
+				owt.setFare(rs.getDouble("fare"));
+				owt.setActivated(rs.getBoolean("activated"));
+			}
+		} catch (SQLException e) {
+			/* Ignore */
 		}
-//		client.close();
 		return owt;
 	}
 

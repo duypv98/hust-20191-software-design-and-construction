@@ -10,6 +10,7 @@ package vn.edu.hust.soict.afc.entities;
 public class OneWayTicket {
 
 	private String id;
+	private String ticketCode;
 	private int embarkationId;
 	private int disembarkationId;
 	private double fare;
@@ -35,6 +36,20 @@ public class OneWayTicket {
 	 */
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the ticketCode
+	 */
+	public String getTicketCode() {
+		return ticketCode;
+	}
+
+	/**
+	 * @param ticketCode the ticketCode to set
+	 */
+	public void setTicketCode(String ticketCode) {
+		this.ticketCode = ticketCode;
 	}
 
 	/**
