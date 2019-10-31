@@ -7,12 +7,7 @@ public class CardScannerBoundary {
     private static CardScanner cardScanner = CardScanner.getInstance();
 
     public static String getCode(String pseudoBarcode) throws InvalidIDException {
-        String cardCode = null;
-        try {
-            cardCode = cardScanner.process(pseudoBarcode);
-        } catch (InvalidIDException e) {
-            throw e;
-        }
+        String cardCode = cardScanner.process(pseudoBarcode);
         return cardCode;
     }
 
