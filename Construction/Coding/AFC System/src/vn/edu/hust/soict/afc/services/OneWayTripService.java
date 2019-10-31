@@ -21,11 +21,11 @@ public class OneWayTripService {
 	 */
 	public static OneWayTrip getTripInfo(int id) throws SQLException {
 		OneWayTrip oneWayTrip = null;
-		String sql = "SELECT ticket_id, income_station_id, income_time, outcome_station_id, outcome_time, real_fare, ontrip FROM oneway_trip WHERE id = " + id;
+		String sql = "SELECT ticket_id, income_station_id, income_time, outcome_station_id, outcome_time, real_fare, ontrip FROM oneway_trip WHERE id = ?";
 
 		client.open();
 		PreparedStatement ps = client.getConnection().prepareStatement(sql);
-//		ps.setString(1, id);
+		ps.setInt(1, id);
 
 		ResultSet rs = ps.executeQuery();
 
@@ -53,17 +53,18 @@ public class OneWayTripService {
 		}
 		
         String sql = "INSERT INTO oneway_trip (ticket_id, income_station_id, income_time, outcome_station_id, outcome_time, real_fare, ontrip)"
-        		+ "VALUES('" 
-        		+ ticketId + "', '"
-        		+ incomeStationId + "', '"
-        		+ incomeTime + "', '"
-        		+ outcomeStationId + "', '"
-        		+ outcomeTime + "', '"
-        		+ realFare + "', '"
-        		+ onTripInt + "')";
+        		+ "VALUES(?, ?, ?, ?, ?, ?, ?)";
         
         client.open();
 		PreparedStatement ps = client.getConnection().prepareStatement(sql);
+		ps.setString(1, ticketId);
+		ps.setInt(2, incomeStationId);
+		ps.setTimestamp(3, incomeTime);
+		ps.setInt(4, outcomeStationId);
+		ps.setTimestamp(5, outcomeTime);
+		ps.setDouble(6, realFare);
+		ps.setInt(7, onTripInt);
+		
 		ps.executeUpdate();
     }
 	
@@ -76,14 +77,20 @@ public class OneWayTripService {
 		}
 		
         String sql = "UPDATE oneway_trip SET " 
-	    		+ "outcome_station_id='" + outcomeStationId + "', "
-	    		+ "outcome_time='" + outcomeTime + "', "
-	    		+ "real_fare='" + realFare + "', "
-	    		+ "ontrip='" + onTripInt + "' WHERE "
-	    		+ "id='" + id + "'";
+	    		+ "outcome_station_id=?, "
+	    		+ "outcome_time=?, "
+	    		+ "real_fare=?, "
+	    		+ "ontrip=?" + " WHERE "
+	    		+ "id=?";
         
         client.open();
 		PreparedStatement ps = client.getConnection().prepareStatement(sql);
+		ps.setInt(1, outcomeStationId);
+		ps.setTimestamp(2, outcomeTime);
+		ps.setDouble(3, realFare);
+		ps.setInt(4, onTripInt);
+		ps.setInt(5, id);
+		
 		ps.executeUpdate();
     }
 	
@@ -91,9 +98,10 @@ public class OneWayTripService {
 //		Timestamp incomeTime = new Timestamp(new Date().getTime());
 //		Timestamp outcomeTime = new Timestamp(new Date().getTime() + 3600000);
 //		
-//		insertTrip("OW201910300000", 1, incomeTime, 3, outcomeTime, 10.0, true);
-		OneWayTrip trip = getTripInfo(1);
-		updateTrip(1, trip.getOutcomeStationId(), trip.getOutcomeTime(), 12.0, false);
+//		insertTrip("OW201910300001", 1, incomeTime, 2, outcomeTime, 5.0, true);
+		OneWayTrip trip = getTripInfo(3);
+//		updateTrip(2, trip.getOutcomeStationId(), trip.getOutcomeTime(), 8.5, false);
+		System.out.println(trip.getTicketId());
 	}
 
 }
