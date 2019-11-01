@@ -1,6 +1,5 @@
 package vn.edu.hust.soict.afc.boundaries;
 
-import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -23,11 +22,13 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
+import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.entities.Station;
 import vn.edu.hust.soict.afc.services.StationService;
 
@@ -35,13 +36,9 @@ public class MainGUI extends JFrame {
 	/**
 	 * Define UI state
 	 */
-	private Station selectedStation;
-	private boolean actCheckIn;
-	private boolean byTicket;
-	private String itemId; // id of selected ticket or card
-	private boolean open;
+	private AppState appState;
 	private Map<String, Station> listStations;
-	private DefaultListModel<String> listTicketIds;
+	private DefaultListModel<String> listBarcode;
 	private List<String> stationKeys;
 
 	/**
@@ -50,76 +47,8 @@ public class MainGUI extends JFrame {
 	private static final long serialVersionUID = -3291303651386410923L;
 	private JPanel contentPanel;
 	private JTextField barcodeInputField;
-
-	/**
-	 * @return the selected Station
-	 */
-	public Station getSelectedStation() {
-		return selectedStation;
-	}
-
-	/**
-	 * @param station the selected station to set
-	 */
-	public void setSelectedStation(Station station) {
-		this.selectedStation = station;
-	}
-
-	/**
-	 * @return the actCheckIn
-	 */
-	public boolean isActCheckIn() {
-		return actCheckIn;
-	}
-
-	/**
-	 * @param actCheckIn the actCheckIn to set
-	 */
-	public void setActCheckIn(boolean actCheckIn) {
-		this.actCheckIn = actCheckIn;
-	}
-
-	/**
-	 * @return the byTicket
-	 */
-	public boolean isByTicket() {
-		return byTicket;
-	}
-
-	/**
-	 * @param byTicket the byTicket to set
-	 */
-	public void setByTicket(boolean byTicket) {
-		this.byTicket = byTicket;
-	}
-
-	/**
-	 * @return the itemId
-	 */
-	public String getItemId() {
-		return itemId;
-	}
-
-	/**
-	 * @param itemId the itemId to set
-	 */
-	public void setItemId(String itemId) {
-		this.itemId = itemId;
-	}
-
-	/**
-	 * @return the open
-	 */
-	public boolean isOpen() {
-		return open;
-	}
-
-	/**
-	 * @param open the open to set
-	 */
-	public void setOpen(boolean open) {
-		this.open = open;
-	}
+	private JButton btnEnter;
+	private JTextPane infoFrame;
 
 	/**
 	 * @return the listStations
@@ -136,17 +65,17 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
-	 * @return the listTicketIds
+	 * @return the listBarcode
 	 */
-	public DefaultListModel<String> getListTicketIds() {
-		return listTicketIds;
+	public DefaultListModel<String> getListBarcode() {
+		return listBarcode;
 	}
 
 	/**
-	 * @param listTicketIds the listTicketIds to set
+	 * @param listBarcode the listBarcode to set
 	 */
-	public void setListTicketIds(DefaultListModel<String> listTicketIds) {
-		this.listTicketIds = listTicketIds;
+	public void setListBarcode(DefaultListModel<String> listBarcode) {
+		this.listBarcode = listBarcode;
 	}
 
 	/**
@@ -161,6 +90,34 @@ public class MainGUI extends JFrame {
 	 */
 	public void setStationKeys(List<String> stationKeys) {
 		this.stationKeys = stationKeys;
+	}
+
+	/**
+	 * @return the appState
+	 */
+	public AppState getAppState() {
+		return appState;
+	}
+
+	/**
+	 * @return the barcodeInputField
+	 */
+	public JTextField getBarcodeInputField() {
+		return barcodeInputField;
+	}
+
+	/**
+	 * @return the btnEnter
+	 */
+	public JButton getBtnEnter() {
+		return btnEnter;
+	}
+
+	/**
+	 * @return the infoFrame
+	 */
+	public JTextPane getInfoFrame() {
+		return infoFrame;
 	}
 
 	/**
@@ -180,22 +137,12 @@ public class MainGUI extends JFrame {
 	}
 
 	public void init() {
-		this.selectedStation = null;
-		this.actCheckIn = true;
-		this.byTicket = true;
-		this.itemId = "";
-		this.open = false;
+		this.appState = new AppState();
 		this.listStations = new HashMap<String, Station>();
 		this.stationKeys = new ArrayList<String>();
-		this.listTicketIds = new DefaultListModel<String>();
+		this.listBarcode = new DefaultListModel<String>();
 		try {
 			List<Station> allStations = new ArrayList<>();
-
-			listTicketIds.addElement("abcz");
-			listTicketIds.addElement("fakeauth");
-			listTicketIds.addElement("notchout");
-			listTicketIds.addElement("outodate");
-			listTicketIds.addElement("vlticket");
 			allStations = StationService.getAllStations();
 			for (int i = 0; i < allStations.size(); i++) {
 				listStations.put(allStations.get(i).getStationName(), allStations.get(i));
@@ -210,6 +157,7 @@ public class MainGUI extends JFrame {
 	 * Create the frame.
 	 */
 	public MainGUI() {
+		setResizable(false);
 		/* init data */
 		init();
 
@@ -251,8 +199,8 @@ public class MainGUI extends JFrame {
 				@SuppressWarnings("unchecked")
 				JComboBox<String> combo = (JComboBox<String>) e.getSource();
 				String selectedKey = (String) combo.getSelectedItem();
-
-				selectedStation = listStations.get(selectedKey);
+				Station selectedStation = listStations.get(selectedKey);
+				appState.setSelectedStation(selectedStation);
 				System.out.println("Station to go: " + selectedStation.getStationName());
 			}
 		});
@@ -271,11 +219,11 @@ public class MainGUI extends JFrame {
 			public void itemStateChanged(ItemEvent e) {
 				int state = e.getStateChange();
 				if (state == ItemEvent.SELECTED) {
-					setActCheckIn(true);
+					appState.setActCheckIn(true);
 				} else if (state == ItemEvent.DESELECTED) {
-					setActCheckIn(false);
+					appState.setActCheckIn(false);
 				}
-				System.out.println("Action: " + actCheckIn);
+				System.out.println("Action: " + appState.isActCheckIn());
 			}
 		});
 		btnCheckIn.setFont(new Font("Segoe UI", Font.PLAIN, 16));
@@ -316,11 +264,26 @@ public class MainGUI extends JFrame {
 			public void itemStateChanged(ItemEvent e) {
 				int state = e.getStateChange();
 				if (state == ItemEvent.SELECTED) {
-					setByTicket(true);
+					appState.setByTicket(true);
+					listBarcode.clear();
+					listBarcode.addElement("abcz: Raise InvalidIDException");
+					listBarcode.addElement("fakeauth: A Fake Ticket");
+					listBarcode.addElement("notchout: A OneWayTicket, checked in but not checked out yet");
+					listBarcode.addElement("outodate: A OneWayTicket, has been used");
+					listBarcode.addElement("vlticket: A valid OneWayTicket");
+					listBarcode.addElement("notouttf: A 24hTicket, checked in but not checked out yet");
+					listBarcode.addElement("outotime: A 24hTicket, out of valid time");
+					listBarcode.addElement("tfoktket: A valid 24hTicket");
 				} else if (state == ItemEvent.DESELECTED) {
-					setByTicket(false);
+					appState.setByTicket(false);
+					listBarcode.clear();
+					listBarcode.addElement("AODC: Raise InvalidIDException");
+					listBarcode.addElement("FAKECARD: A Fake Card");
+					listBarcode.addElement("NOTCHOUT: A Prepaid Card, checked in but not checked out yet");
+					listBarcode.addElement("NOTENBAL: A Prepaid Card, not enough balance to check in");
+					listBarcode.addElement("VLPRCARD: A valid Prepaid card");
 				}
-				System.out.println("Check by ticket: " + byTicket);
+				System.out.println("Check by ticket: " + appState.isByTicket());
 			}
 		});
 		btnTicket.setFont(new Font("Segoe UI", Font.PLAIN, 16));
@@ -351,9 +314,14 @@ public class MainGUI extends JFrame {
 		contentPanel.add(panelListOfAvailable);
 
 		/* List of all tickets/cards that available */
-		JList<String> listAvailable = new JList<String>(listTicketIds);
-		listAvailable.setBounds(35, 281, 344, 159);
-		contentPanel.add(listAvailable);
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(35, 281, 344, 159);
+		contentPanel.add(scrollPane);
+		JList<String> listAvailable = new JList<String>(listBarcode);
+		scrollPane.setViewportView(listAvailable);
+		listAvailable.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		listAvailable.setSelectionMode(0);
 
 		/* Label: Text Input field for inputting manually */
 		JLabel inputBarcodeLabel = new JLabel("You can input your ticket's or card's pseudoBarcode here");
@@ -366,35 +334,22 @@ public class MainGUI extends JFrame {
 		inputBarcodeLabel.setLabelFor(barcodeInputField);
 		barcodeInputField.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		barcodeInputField.setBounds(35, 468, 344, 25);
-		contentPanel.add(barcodeInputField);
 		barcodeInputField.setColumns(10);
+		contentPanel.add(barcodeInputField);
 
-		/* Panel for Gate */
-		JPanel gatePanel = new JPanel();
-		gatePanel.setBounds(449, 165, 401, 275);
-		contentPanel.add(gatePanel);
-
-		/* This canvas contain image of a Gate state (close or open) */
-		Canvas gateCanvas = new Canvas();
-		gatePanel.add(gateCanvas);
-
-		JButton btnEnter = new JButton("Enter");
-		btnEnter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println(selectedStation.getStationName());
-			}
-		});
+		btnEnter = new JButton("Enter");
 		btnEnter.setBounds(144, 496, 97, 41);
 		contentPanel.add(btnEnter);
 
-		JTextPane infoFrame = new JTextPane();
+		infoFrame = new JTextPane();
+		infoFrame.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		infoFrame.setEditable(false);
-		infoFrame.setBounds(449, 453, 401, 84);
+		infoFrame.setBounds(449, 440, 401, 97);
 		contentPanel.add(infoFrame);
 
 		/* Footer seperator */
 		JSeparator separatorFooter = new JSeparator();
-		separatorFooter.setBounds(0, 550, 893, 7);
+		separatorFooter.setBounds(0, 550, 905, 7);
 		contentPanel.add(separatorFooter);
 
 		/* License */

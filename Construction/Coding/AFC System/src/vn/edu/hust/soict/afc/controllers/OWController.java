@@ -3,10 +3,12 @@
  */
 package vn.edu.hust.soict.afc.controllers;
 
+import java.awt.Color;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.entities.OneWayTicket;
 import vn.edu.hust.soict.afc.entities.OneWayTrip;
 import vn.edu.hust.soict.afc.entities.Station;
@@ -27,39 +29,74 @@ public class OWController {
 	}
 
 	/**
-	 * @param ticketCode
-	 * @throws SQLException
-	 * @return OneWayTicket
+	 * 
+	 * @param ticketId
+	 * @return a oneway ticket from id
 	 */
-	public static OneWayTicket getTicketInfo(String ticketCode) throws SQLException {
-		OneWayTicket owt = null;
-		try {
-			owt = new OneWayTicket();
-			owt = OWTicketService.getTicketInfo(ticketCode);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		}
+	public OneWayTicket getTicket(String ticketId) {
+		OneWayTicket owt = new OneWayTicket();
+		owt = OWTicketService.getTicketInfo(ticketId);
 		return owt;
 	}
 
 	/**
 	 * 
+	 * @param selectedStation
 	 * @param oneWayTicket
-	 * @param station
-	 * @return
+	 * @return response of checkin operation
 	 * @throws SQLException
 	 */
-	public static boolean checkIn(OneWayTicket oneWayTicket, Station station) throws SQLException {
-		Station embarkation = StationService.getStationInfo(oneWayTicket.getEmbarkationId());
-		Station disembarkation = StationService.getStationInfo(oneWayTicket.getDisembarkationId());
-		double currentDistance = station.getDistance();
-		boolean pass = false;
-		if (embarkation.getDistance() <= currentDistance && disembarkation.getDistance() >= currentDistance) {
-			pass = true;
+	public DataResponse checkIn(Station selectedStation, OneWayTicket oneWayTicket) throws SQLException {
+		DataResponse res = new DataResponse();
+		double currentPos = selectedStation.getDistance();
+		if (oneWayTicket.isCheckedIn()) {
+			res.setMessage("INVALID TICKET\n This ticket just only for checkout");
+			res.setDisplayColor(Color.RED);
+		} else {
+			Station embarkation = StationService.getStationInfo(oneWayTicket.getEmbarkationId());
+			Station disembarkation = StationService.getStationInfo(oneWayTicket.getDisembarkationId());
+			double distance = disembarkation.getDistance() - embarkation.getDistance();
+			if (embarkation.getDistance() <= currentPos && currentPos <= disembarkation.getDistance()) {
+				String message = "OPENING TICKET..." + "\nTicketID: " + oneWayTicket.getId() + "\nDistance: " + distance
+						+ " km" + "\nFare: " + oneWayTicket.getFare() + " eur";
+				res.setMessage(message);
+				res.setDisplayColor(Color.GREEN);
+			} else {
+				res.setMessage("INVALID TICKET\nWRONG STATION TO GO !");
+				res.setDisplayColor(Color.RED);
+			}
 		}
-		return pass;
+		return res;
+	}
+
+	/**
+	 * 
+	 * @param ticketId
+	 * @param isActCheckIn
+	 * @param selectedStation
+	 * @return response for process on ticket
+	 */
+	public DataResponse process(String ticketId, boolean isActCheckIn, Station selectedStation) {
+		DataResponse res = new DataResponse();
+		OneWayTicket owt = getTicket(ticketId);
+		if (owt == null) {
+			res.setMessage("INVALID TICKET\nCan't find this ticket");
+			res.setDisplayColor(Color.RED);
+		} else {
+			if (owt.isActivated()) {
+				res.setMessage("INVALID TICKET\nThis ticket is no longer valid");
+				res.setDisplayColor(Color.RED);
+			} else {
+				if (isActCheckIn) {
+					try {
+						res = checkIn(selectedStation, owt);
+					} catch (SQLException e) {
+						/* Ignore */
+					}
+				}
+			}
+		}
+		return res;
 	}
 	
 	public static boolean checkOut(OneWayTicket oneWayTicket, Station station) throws SQLException {

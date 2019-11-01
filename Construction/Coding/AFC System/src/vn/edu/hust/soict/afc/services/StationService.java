@@ -22,7 +22,7 @@ public class StationService {
 	/**
 	 * 
 	 * @param stationId
-	 * @return
+	 * @return station from id
 	 * @throws SQLException
 	 */
 	public static Station getStationInfo(int stationId) throws SQLException {
@@ -46,6 +46,11 @@ public class StationService {
 		return station;
 	}
 	
+	/**
+	 * 
+	 * @return list of all stations
+	 * @throws SQLException
+	 */
 	public static List<Station> getAllStations() throws SQLException {
 		List<Station> rList = new ArrayList<>();
 		String sql = "SELECT id, station_name, distance FROM station";
