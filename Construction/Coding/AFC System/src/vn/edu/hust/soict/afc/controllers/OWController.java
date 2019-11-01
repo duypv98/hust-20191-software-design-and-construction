@@ -21,6 +21,12 @@ import vn.edu.hust.soict.afc.services.StationService;
  *
  */
 public class OWController {
+	
+	public final static double BASE_DISTANCE = 5.0;
+	public final static double BASE_FARE = 1.9;
+	public final static double ADDED_DISTANCE = 2.0;
+	public final static double ADDED_FARE = 0.4;
+	
 	/**
 	 * 
 	 */
@@ -143,7 +149,12 @@ public class OWController {
 	}
 	
 	public static double getFare(Station startStation, Station endStation) {
-		// TO DO
-		return 3.0;
+		double distance  = Math.abs(endStation.getDistance() - startStation.getDistance());
+		if (distance < BASE_DISTANCE) {
+			return BASE_FARE;
+		}
+		
+		double numberOfAddedDistance = Math.ceil((distance - BASE_DISTANCE) / ADDED_DISTANCE);
+		return BASE_FARE + ADDED_FARE * numberOfAddedDistance;
 	}
 }
