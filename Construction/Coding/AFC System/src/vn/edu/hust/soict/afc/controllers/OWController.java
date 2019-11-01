@@ -99,31 +99,51 @@ public class OWController {
 		return res;
 	}
 	
-	public static boolean checkOut(OneWayTicket oneWayTicket, Station station) throws SQLException {
-		if (oneWayTicket.isActivated() || !oneWayTicket.isCheckedIn()) {
-			return false;
-		}
-		OneWayTrip oneWayTrip = OneWayTripService.getTripInfo(oneWayTicket.getId());
-		Station embarkation = StationService.getStationInfo(oneWayTicket.getEmbarkationId());
-		Station disembarkation = StationService.getStationInfo(oneWayTicket.getDisembarkationId());
-		Station incomeStation = StationService.getStationInfo(oneWayTrip.getIncomeStationId());
-		Station outcomeStation = station;
-		Double realFare = getFare(incomeStation, outcomeStation);
+	/**
+	 * 
+	 * @param selectedStation
+	 * @param oneWayTicket
+	 * @return response of checkout operation
+	 * @throws SQLException
+	 */
+	public DataResponse checkOut(Station selectedStation, OneWayTicket oneWayTicket) throws SQLException {
+		DataResponse res = new DataResponse();
+		if (!oneWayTicket.isCheckedIn()) {
+			res.setMessage("INVALID ONE WAY TICKET\n "
+					+ "ID: " + oneWayTicket.getId() + "\n"
+					+ "This ticket just only for checkin");
+			res.setDisplayColor(Color.RED);
+			return res;
+		} 
 		
-		if (realFare <= getFare(embarkation, disembarkation)) {
-			OneWayTripService.updateTrip(oneWayTrip.getId(), station.getId(), new Timestamp(new Date().getTime()), realFare, false);
-//			OWTicketService.update status
-			return true;
-		}
-		return false;
+		OneWayTrip oneWayTrip = OneWayTripService.getTripInfo(oneWayTicket.getId());
+		Station incomeStation = StationService.getStationInfo(oneWayTrip.getIncomeStationId());
+		Station outcomeStation = selectedStation;
+		Double realFare = getFare(incomeStation, outcomeStation);
+		Double fareOnTicket = oneWayTicket.getFare();
+		
+		String message = "";
+		if (realFare > fareOnTicket) {
+			message = "INVALID ONE WAY TICKET\n"
+					+ "ID: " + oneWayTicket.getId() + ", balance: " + fareOnTicket + " eur\n"
+					+ "Not enough balance, expected: " + realFare + " eur";
+			res.setMessage(message);
+			res.setDisplayColor(Color.RED);
+			return res;
+		} 
+		
+		OneWayTripService.updateTrip(oneWayTrip.getId(), outcomeStation.getId(), new Timestamp(new Date().getTime()), realFare, false);
+		message = "OPENING GATE BY ONE WAY TICKET...\n"
+				+ "ID: " + oneWayTicket.getId() + ", balance: " + fareOnTicket + " eur\n"
+				+ "In reality: " + realFare + " eur";
+//		OWTicketService.update status
+		res.setMessage(message);
+		res.setDisplayColor(Color.GREEN);
+		return res;
 	}
 	
 	public static double getFare(Station startStation, Station endStation) {
 		// TO DO
 		return 3.0;
-	}
-
-	public static void main(String[] args) throws SQLException {
-		System.out.println(checkOut(OWTicketService.getTicketInfo("b8094c1ccdff1df9"), StationService.getStationInfo(5)));
 	}
 }
