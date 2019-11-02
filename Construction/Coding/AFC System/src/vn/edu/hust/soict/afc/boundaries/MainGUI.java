@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +39,7 @@ public class MainGUI extends JFrame {
 	private Map<String, Station> listStations;
 	private DefaultListModel<String> listBarcode;
 	private List<String> stationKeys;
+	private GateBoundary gatePanel;
 
 	/**
 	 * Auto-generated JWT Config
@@ -119,6 +119,13 @@ public class MainGUI extends JFrame {
 	public JTextPane getInfoFrame() {
 		return infoFrame;
 	}
+	
+	/**
+	 * @return the gatePanel
+	 */
+	public GateBoundary getGatePanel() {
+		return gatePanel;
+	}
 
 	/**
 	 * Launch the application.
@@ -141,15 +148,11 @@ public class MainGUI extends JFrame {
 		this.listStations = new HashMap<String, Station>();
 		this.stationKeys = new ArrayList<String>();
 		this.listBarcode = new DefaultListModel<String>();
-		try {
-			List<Station> allStations = new ArrayList<>();
-			allStations = StationService.getAllStations();
-			for (int i = 0; i < allStations.size(); i++) {
-				listStations.put(allStations.get(i).getStationName(), allStations.get(i));
-				stationKeys.add(allStations.get(i).getStationName());
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		List<Station> allStations = new ArrayList<>();
+		allStations = StationService.getAllStations();
+		for (int i = 0; i < allStations.size(); i++) {
+			listStations.put(allStations.get(i).getStationName(), allStations.get(i));
+			stationKeys.add(allStations.get(i).getStationName());
 		}
 	}
 
@@ -360,5 +363,8 @@ public class MainGUI extends JFrame {
 		license.setBounds(563, 562, 287, 25);
 		license.setEditable(false);
 		contentPanel.add(license);
+		
+		gatePanel = new GateBoundary();
+		contentPanel.add(gatePanel);
 	}
 }
