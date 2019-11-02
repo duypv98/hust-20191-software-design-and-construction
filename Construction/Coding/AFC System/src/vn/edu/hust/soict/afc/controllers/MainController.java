@@ -30,8 +30,8 @@ public class MainController {
 	public static TicketRecognizer ticketRecognizer;
 	private OWController owController;
 	private TFController tfController;
-	private PCController prepaidCardController = new PCController();
 	public static CardScanner cardScanner;
+	private PrepaidCardController prepaidCardController = new PrepaidCardController();
 
 	/**
 	 * 
@@ -58,7 +58,7 @@ public class MainController {
 	public OWController getOwController() {
 		return owController;
 	}
-
+	
 	/**
 	 * @return the tfController
 	 */
@@ -72,7 +72,7 @@ public class MainController {
 	public void setOwController(OWController owController) {
 		this.owController = owController;
 	}
-
+	
 	/**
 	 * @param tfController
 	 */
@@ -108,28 +108,24 @@ public class MainController {
 			String ticketCode = getTicketCode(barcode);
 			if (ticketCode != null) {
 				String ticketId = TicketService.getTicketId(ticketCode);
-				if (ticketId == null) {
-					res.setMessage("INVALID TICKET\nCan't find this ticket");
-					res.setDisplayColor(Color.RED);
+				String ticketType = ticketId.substring(0, 2);
+				if (ticketType.equalsIgnoreCase("OW")) {
+
+					res = owController.process(ticketId, mainFrame.getAppState().isActCheckIn(),
+							mainFrame.getAppState().getSelectedStation());
+
 				} else {
-					String ticketType = ticketId.substring(0, 2);
-					if (ticketType.equalsIgnoreCase("OW")) {
-
-						res = owController.process(ticketId, mainFrame.getAppState().isActCheckIn(),
-								mainFrame.getAppState().getSelectedStation());
-
-					} else {
-						if (ticketType.equalsIgnoreCase("TF")) {
-
-							res = tfController.process(ticketId, mainFrame.getAppState().isActCheckIn(),
-									mainFrame.getAppState().getSelectedStation());
-						}
+					// TODO Handle check by 24h Ticket
+					if (ticketType.equalsIgnoreCase("TF")) {
+						
+					res = tfController.process(ticketId, mainFrame.getAppState().isActCheckIn());
 					}
 				}
 			}
 		} else {
+			// TODO Handle check by Prepaid Card
 			String cardCode = getCardCode(barcode);
-			if (cardCode == null) {
+			if(cardCode == null) {
 				res.setMessage("INVALID CARD\nCan't read barcode");
 				res.setDisplayColor(Color.RED);
 			} else {

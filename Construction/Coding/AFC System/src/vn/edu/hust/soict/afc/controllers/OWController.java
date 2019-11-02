@@ -69,12 +69,6 @@ public class OWController {
 					} catch (SQLException e) {
 						/* Ignore */
 					}
-				} else {
-					try {
-						res = checkOut(selectedStation, owt);
-					} catch (SQLException e) {
-						/* Ignore */
-					}
 				}
 			}
 		}
@@ -106,7 +100,6 @@ public class OWController {
 				res.setGateOpen(true);
 				Timestamp incomeTime = new Timestamp(System.currentTimeMillis());
 				OWTripService.createTrip(oneWayTicket.getId(), selectedStation.getId(), incomeTime, true);
-				OWTicketService.updateTicket(oneWayTicket.getId(), true, false);
 			} else {
 				res.setMessage("INVALID TICKET\nWrong station to go !");
 				res.setDisplayColor(Color.RED);
@@ -154,10 +147,9 @@ public class OWController {
 		message = "OPENING GATE BY ONE WAY TICKET...\n"
 				+ "ID: " + oneWayTicket.getId() + ", balance: " + fareOnTicket + " eur\n"
 				+ "In reality: " + realFare + " eur";
-		OWTicketService.updateTicket(oneWayTicket.getId(), false, true);
+		OWTicketService.updateTicket(oneWayTicket.getId(), false, false);
 		res.setMessage(message);
 		res.setDisplayColor(Color.GREEN);
-		res.setGateOpen(true);
 		return res;
 	}
 	

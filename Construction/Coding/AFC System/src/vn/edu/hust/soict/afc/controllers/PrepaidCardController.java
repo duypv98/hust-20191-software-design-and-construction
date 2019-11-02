@@ -7,36 +7,29 @@ import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.entities.PrepaidCard;
 import vn.edu.hust.soict.afc.entities.Station;
-import vn.edu.hust.soict.afc.services.PCService;
+import vn.edu.hust.soict.afc.services.PrepaidCardService;
 
-public class PCController {
+public class PrepaidCardController {
 
-	private static final double BASE_FARE = 1.9;
+    private static final double BASE_FARE = 1.9;
 
-	/**
-	 * 
-	 */
-	public PCController() {
+	public static PrepaidCard getPrepaidCardInfo(String cardCode) throws SQLException {
+        PrepaidCard prePaidCard = PrepaidCardService.getPrepaidCardInfo(cardCode);
+        return prePaidCard;
+    }
 
-	}
-
-	public PrepaidCard getPrepaidCardInfo(String cardCode) throws SQLException {
-		PrepaidCard prePaidCard = PCService.getPrepaidCardInfo(cardCode);
-		return prePaidCard;
-	}
-
-	public boolean checkIn(PrepaidCard prepaidCard, Station station) throws SQLException {
-		if (PCService.saveTransactionCheckIn(prepaidCard.getId(), station.getId())) {
-			return true;
-		}
-		return false;
-	}
+    public static boolean checkIn(PrepaidCard prepaidCard, Station station) throws SQLException {
+        if(PrepaidCardService.saveTransactionCheckIn(prepaidCard.getId(), station.getId())) {
+            return true;
+        }
+        return false;
+    }
 
 	public DataResponse process(String cardCode, AppState appState) {
 		DataResponse res = new DataResponse();
 		PrepaidCard prepaidCard = null;
 		try {
-			prepaidCard = PCService.getPrepaidCardInfo(cardCode);
+			prepaidCard = PrepaidCardService.getPrepaidCardInfo(cardCode);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 		}
@@ -45,8 +38,9 @@ public class PCController {
 			res.setDisplayColor(Color.RED);
 		} else {
 			if (prepaidCard.getBalance() < BASE_FARE) {
-				res.setMessage("INVALID CARD\nThe balance on the card is less than the base fare" + "\nCardID: "
-						+ prepaidCard.getId() + "\nBalance: " + prepaidCard.getBalance() + " eur");
+				res.setMessage("INVALID CARD\nThe balance on the card is less than the base fare"
+						+ "\nCardID: " + prepaidCard.getId()
+						+ "\nBalance: " + prepaidCard.getBalance() + " eur");
 				res.setDisplayColor(Color.RED);
 			} else {
 				if (appState.isActCheckIn()) {
@@ -55,9 +49,9 @@ public class PCController {
 							res.setMessage("INVALID TICKET\nThis card just only for checkout");
 							res.setDisplayColor(Color.RED);
 						} else {
-							if (checkIn(prepaidCard, appState.getSelectedStation())) {
+							if(checkIn(prepaidCard, appState.getSelectedStation())) {
 								String message = "OPENING TICKET..." + "\nCardID: " + prepaidCard.getId()
-										+ "\nBalance: " + prepaidCard.getBalance() + " eur";
+													+ "\nBalance: " + prepaidCard.getBalance() + " eur";
 								res.setMessage(message);
 								res.setDisplayColor(Color.GREEN);
 							} else {

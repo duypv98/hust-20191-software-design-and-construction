@@ -45,6 +45,7 @@ public class OWTripService {
 		return oneWayTrip;
 	}
 
+	@SuppressWarnings("null")
 	public static void createTrip(String ticketId, int incomeStationId, Timestamp incomeTime, boolean onTrip) {
 		int isOnTrip = onTrip ? 1 : 0;
 		String sql = "INSERT INTO oneway_trip (ticket_id, income_station_id, income_time, ontrip)"
