@@ -17,9 +17,9 @@ public class TFTripService {
 	 * @return TwentyFourTrip
 	 * @throws SQLException
 	 */
-	public static TwentyFourTrip getTripInfo(String ticketId) throws SQLException {
+	public static TwentyFourTrip getTripInfo(String ticketId) {
 		TwentyFourTrip twentyFourTrip = null;
-		String sql = "SELECT id, income_station_id, income_time, outcome_station_id, outcome_time, ontrip FROM twentyfour_trip WHERE ticket_id = ?";
+		String sql = "SELECT id, income_station_id, income_time, outcome_station_id, outcome_time, ontrip FROM tf_trip WHERE ticket_id = ? AND ontrip = 1";
 		try {
 			client.open();
 			PreparedStatement ps = client.getConnection().prepareStatement(sql);
@@ -63,7 +63,7 @@ public class TFTripService {
 		}
 	}
 
-	public static void updateTrip(String ticketId, int outcomeStationId, Timestamp outcomeTime, boolean onTrip) {
+	public static void updateTrip(int id, int outcomeStationId, Timestamp outcomeTime, boolean onTrip) {
 		int isOnTrip = onTrip ? 1 : 0;
 
 		String sql = "UPDATE twentyfour_trip SET outcome_station_id = ?, outcome_time = ?, ontrip = ?"
@@ -75,7 +75,7 @@ public class TFTripService {
 			ps.setInt(1, outcomeStationId);
 			ps.setTimestamp(2, outcomeTime);
 			ps.setInt(3, isOnTrip);
-			ps.setString(4, ticketId);
+			ps.setInt(4, id);
 			ps.setBoolean(5, false);
 
 			ps.executeUpdate();

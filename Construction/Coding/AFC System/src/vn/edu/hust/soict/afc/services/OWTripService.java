@@ -19,12 +19,13 @@ public class OWTripService {
 	 */
 	public static OneWayTrip getTripInfo(String ticketId) {
 		OneWayTrip oneWayTrip = null;
-		String sql = "SELECT id, income_station_id, income_time, outcome_station_id, outcome_time, real_fare, ontrip FROM oneway_trip WHERE ticket_id = ?";
+		String sql = "SELECT id, income_station_id, income_time, outcome_station_id, outcome_time, real_fare, ontrip FROM oneway_trip WHERE ticket_id = ? AND ontrip = ?";
 
 		try {
 			client.open();
 			PreparedStatement ps = client.getConnection().prepareStatement(sql);
 			ps.setString(1, ticketId);
+			ps.setBoolean(2, true);
 
 			ResultSet rs = ps.executeQuery();
 
@@ -86,7 +87,7 @@ public class OWTripService {
 			ps.setTimestamp(2, outcomeTime);
 			ps.setDouble(3, realFare);
 			ps.setInt(4, isOnTrip);
-			ps.setInt(5, id);
+			ps.setInt(5, id);;
 
 			ps.executeUpdate();
 		} catch (SQLException e) {

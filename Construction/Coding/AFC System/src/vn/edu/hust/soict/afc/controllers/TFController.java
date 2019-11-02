@@ -10,6 +10,7 @@ import java.util.Date;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.entities.Station;
 import vn.edu.hust.soict.afc.entities.TwentyFourTicket;
+import vn.edu.hust.soict.afc.entities.TwentyFourTrip;
 import vn.edu.hust.soict.afc.services.TFTicketService;
 import vn.edu.hust.soict.afc.services.TFTripService;
 
@@ -81,11 +82,11 @@ public class TFController {
 			res.setMessage("INVALID TICKET\n This ticket just only for checkin");
 			res.setDisplayColor(Color.RED);
 		} else {
-			
+			TwentyFourTrip tfTrip = TFTripService.getTripInfo(twentyFourTicket.getId());
 			String message = "OPENING GATE..." + "\nTicketID: " + twentyFourTicket.getId() + "\nValid Time: " + twentyFourTicket.getValidTime();
 			res.setMessage(message);
 			res.setDisplayColor(Color.GREEN);
-			TFTripService.updateTrip(twentyFourTicket.getId(), selectedStation.getId(), outcomeTime, false);
+			TFTripService.updateTrip(tfTrip.getId(), selectedStation.getId(), outcomeTime, false);
 			TFTicketService.updateTicket(twentyFourTicket.getId(), false);
 		}
 			return res;
