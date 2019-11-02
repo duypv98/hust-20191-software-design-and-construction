@@ -22,24 +22,27 @@ public class StationService {
 	/**
 	 * 
 	 * @param stationId
-	 * @return station from id
-	 * @throws SQLException
+	 * @return
 	 */
-	public static Station getStationInfo(int stationId) throws SQLException {
+	public static Station getStationInfo(int stationId) {
 		Station station = null;
 		String sql = "SELECT station_name, distance FROM station WHERE id = ?";
 
-		client.open();
-		PreparedStatement ps = client.getConnection().prepareStatement(sql);
-		ps.setInt(1, stationId);
+		try {
+			client.open();
+			PreparedStatement ps = client.getConnection().prepareStatement(sql);
+			ps.setInt(1, stationId);
 
-		ResultSet rs = ps.executeQuery();
+			ResultSet rs = ps.executeQuery();
 
-		if (rs.first()) {
-			station = new Station();
-			station.setId(stationId);
-			station.setStationName(rs.getString("station_name"));
-			station.setDistance(rs.getDouble("distance"));
+			if (rs.first()) {
+				station = new Station();
+				station.setId(stationId);
+				station.setStationName(rs.getString("station_name"));
+				station.setDistance(rs.getDouble("distance"));
+			}
+		} catch (SQLException e) {
+			/* Ignore */
 		}
 
 //		client.close();
@@ -48,23 +51,26 @@ public class StationService {
 	
 	/**
 	 * 
-	 * @return list of all stations
-	 * @throws SQLException
+	 * @return
 	 */
-	public static List<Station> getAllStations() throws SQLException {
+	public static List<Station> getAllStations() {
 		List<Station> rList = new ArrayList<>();
 		String sql = "SELECT id, station_name, distance FROM station";
-		client.open();
-		PreparedStatement ps = client.getConnection().prepareStatement(sql);
-		ResultSet rs = ps.executeQuery();
+		try {
+			client.open();
+			PreparedStatement ps = client.getConnection().prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
 
-		while (rs.next()) {
-			Station st = new Station();
-			st.setId(rs.getInt("id"));
-			st.setStationName(rs.getString("station_name"));
-			st.setDistance(rs.getDouble("distance"));
+			while (rs.next()) {
+				Station st = new Station();
+				st.setId(rs.getInt("id"));
+				st.setStationName(rs.getString("station_name"));
+				st.setDistance(rs.getDouble("distance"));
 
-			rList.add(st);
+				rList.add(st);
+			}
+		} catch (SQLException e) {
+			/* Ignore */
 		}
 		return rList;
 	}

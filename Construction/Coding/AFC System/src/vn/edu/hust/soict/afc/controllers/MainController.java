@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package vn.edu.hust.soict.afc.controllers;
 
@@ -12,6 +12,7 @@ import javax.swing.ImageIcon;
 
 import hust.soict.se.customexception.InvalidIDException;
 import hust.soict.se.recognizer.TicketRecognizer;
+import hust.soict.se.scanner.CardScanner;
 import vn.edu.hust.soict.afc.boundaries.MainGUI;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.services.TicketService;
@@ -28,6 +29,9 @@ public class MainController {
 	public MainGUI mainFrame;
 	public static TicketRecognizer ticketRecognizer;
 	private OWController owController;
+	private TFController tfController;
+	public static CardScanner cardScanner;
+	private PrepaidCardController prepaidCardController = new PrepaidCardController();
 
 	/**
 	 * 
@@ -35,7 +39,9 @@ public class MainController {
 	public MainController() {
 		res = new DataResponse();
 		ticketRecognizer = TicketRecognizer.getInstance();
+		cardScanner = CardScanner.getInstance();
 		setOwController(new OWController());
+		setTfController(new TFController());
 		mainFrame = new MainGUI();
 		mainFrame.getBtnEnter().addActionListener(new ActionListener() {
 
@@ -52,6 +58,13 @@ public class MainController {
 	public OWController getOwController() {
 		return owController;
 	}
+	
+	/**
+	 * @return the tfController
+	 */
+	public TFController getTfController() {
+		return tfController;
+	}
 
 	/**
 	 * @param owController the owController to set
@@ -59,26 +72,41 @@ public class MainController {
 	public void setOwController(OWController owController) {
 		this.owController = owController;
 	}
+	
+	/**
+	 * @param tfController
+	 */
+	public void setTfController(TFController tfController) {
+		this.tfController = tfController;
+	}
 
 	public String getTicketCode(String barcode) {
 		String ticketCode = null;
 		try {
 			ticketCode = ticketRecognizer.process(barcode);
 		} catch (InvalidIDException e) {
-			/* Ignore */
+			res.setMessage("INVALID TICKET\nCan't read barcode");
+			res.setDisplayColor(Color.RED);
 		}
 		return ticketCode;
+	}
+
+	public String getCardCode(String barcode) {
+		String cardCode = null;
+		try {
+			cardCode = cardScanner.process(barcode);
+		} catch (InvalidIDException e) {
+			res.setMessage("INVALID CARD\nCan't read barcode");
+			res.setDisplayColor(Color.RED);
+		}
+		return cardCode;
 	}
 
 	public void commandEnter() {
 		String barcode = mainFrame.getBarcodeInputField().getText();
 		if (mainFrame.getAppState().isByTicket()) {
 			String ticketCode = getTicketCode(barcode);
-			if (ticketCode == null) {
-				res.setMessage("INVALID TICKET\nCan't read barcode");
-				res.setDisplayColor(Color.RED);
-
-			} else {
+			if (ticketCode != null) {
 				String ticketId = TicketService.getTicketId(ticketCode);
 				String ticketType = ticketId.substring(0, 2);
 				if (ticketType.equalsIgnoreCase("OW")) {
@@ -88,13 +116,27 @@ public class MainController {
 
 				} else {
 					// TODO Handle check by 24h Ticket
+					if (ticketType.equalsIgnoreCase("TF")) {
+						
+					res = tfController.process(ticketId, mainFrame.getAppState().isActCheckIn());
+					}
 				}
 			}
 		} else {
 			// TODO Handle check by Prepaid Card
+			String cardCode = getCardCode(barcode);
+			if(cardCode == null) {
+				res.setMessage("INVALID CARD\nCan't read barcode");
+				res.setDisplayColor(Color.RED);
+			} else {
+				res = prepaidCardController.process(cardCode, mainFrame.getAppState());
+			}
 		}
 		mainFrame.getInfoFrame().setText(res.getMessage());
 		mainFrame.getInfoFrame().setForeground(res.getDisplayColor());
+		if (res.isGateOpen()) {
+			mainFrame.getGatePanel().open();
+		}
 	}
 
 	public static void main(String[] args) {
