@@ -3,6 +3,7 @@ package vn.edu.hust.soict.afc.services;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 import vn.edu.hust.soict.afc.common.BaseDataClient;
 import vn.edu.hust.soict.afc.entities.TwentyFourTicket;
@@ -33,5 +34,35 @@ public class TFTicketService {
 		}
 		return tft;
 	}
-
+	
+	public static void updateTicketFirstTime(String ticketId, Timestamp valid_time, boolean checkedIn) {
+		int isCheckedIn = checkedIn ? 1 : 0;
+		String sql = "UPDATE tf_ticket SET valid_time = ?, checked_in = ? WHERE ticket_id = ?";
+		try {
+			client.open();
+			PreparedStatement ps = client.getConnection().prepareStatement(sql);
+			ps.setTimestamp(1, valid_time);
+			ps.setInt(2, isCheckedIn);
+			ps.setString(3, ticketId);
+			
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			System.err.println("Can't update due to SQL Error");
+		}
+	}
+	
+	public static void updateTicket(String ticketId, boolean checkedIn) {
+		int isCheckedIn = checkedIn ? 1 : 0;
+		String sql = "UPDATE tf_ticket SET valid_time = ?, checked_in = ? WHERE ticket_id = ?";
+		try {
+			client.open();
+			PreparedStatement ps = client.getConnection().prepareStatement(sql);
+			ps.setInt(1, isCheckedIn);
+			ps.setString(2, ticketId);
+			
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			System.err.println("Can't update due to SQL Error");
+		}
+	}
 }

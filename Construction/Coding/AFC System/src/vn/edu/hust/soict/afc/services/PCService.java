@@ -9,7 +9,7 @@ import java.util.Date;
 import vn.edu.hust.soict.afc.common.BaseDataClient;
 import vn.edu.hust.soict.afc.entities.PrepaidCard;
 
-public class PrepaidCardService {
+public class PCService {
     private static BaseDataClient client = new BaseDataClient();
 
     public static PrepaidCard getPrepaidCardInfo(String cardCode) throws SQLException {
