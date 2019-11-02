@@ -142,7 +142,7 @@ public class OWController {
 		message = "OPENING GATE BY ONE WAY TICKET...\n"
 				+ "ID: " + oneWayTicket.getId() + ", balance: " + fareOnTicket + " eur\n"
 				+ "In reality: " + realFare + " eur";
-//		OWTicketService.update status
+		OWTicketService.updateTicket(oneWayTicket.getId(), false, false);
 		res.setMessage(message);
 		res.setDisplayColor(Color.GREEN);
 		return res;
