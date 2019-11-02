@@ -1,7 +1,6 @@
 package vn.edu.hust.soict.afc.controllers;
 
 import java.awt.Color;
-import java.sql.SQLException;
 
 import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.common.DataResponse;
@@ -13,12 +12,8 @@ public class PrepaidCardController {
 
     private static final double BASE_FARE = 1.9;
 
-	public static PrepaidCard getPrepaidCardInfo(String cardCode) throws SQLException {
-        PrepaidCard prePaidCard = PrepaidCardService.getPrepaidCardInfo(cardCode);
-        return prePaidCard;
-    }
 
-    public static boolean checkIn(PrepaidCard prepaidCard, Station station) throws SQLException {
+    public static boolean checkIn(PrepaidCard prepaidCard, Station station) {
         if(PrepaidCardService.saveTransactionCheckIn(prepaidCard.getId(), station.getId())) {
             return true;
         }
@@ -27,12 +22,7 @@ public class PrepaidCardController {
 
 	public DataResponse process(String cardCode, AppState appState) {
 		DataResponse res = new DataResponse();
-		PrepaidCard prepaidCard = null;
-		try {
-			prepaidCard = PrepaidCardService.getPrepaidCardInfo(cardCode);
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-		}
+        PrepaidCard prepaidCard = PrepaidCardService.getPrepaidCardInfo(cardCode);
 		if (prepaidCard == null) {
 			res.setMessage("INVALID CARD\nCan't find this ticket");
 			res.setDisplayColor(Color.RED);
@@ -44,7 +34,6 @@ public class PrepaidCardController {
 				res.setDisplayColor(Color.RED);
 			} else {
 				if (appState.isActCheckIn()) {
-					try {
 						if (prepaidCard.isCheckedIn()) {
 							res.setMessage("INVALID TICKET\nThis card just only for checkout");
 							res.setDisplayColor(Color.RED);
@@ -59,9 +48,6 @@ public class PrepaidCardController {
 								res.setDisplayColor(Color.RED);
 							}
 						}
-					} catch (SQLException e) {
-						/* Ignore */
-					}
 				}
 			}
 		}

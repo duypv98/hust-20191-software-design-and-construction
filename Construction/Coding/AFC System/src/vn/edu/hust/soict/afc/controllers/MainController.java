@@ -106,13 +106,17 @@ public class MainController {
 			}
 		} else {
 			// TODO Handle check by Prepaid Card
-			String cardCode = getCardCode(barcode);
-			if(cardCode == null) {
-				res.setMessage("INVALID CARD\nCan't read barcode");
-				res.setDisplayColor(Color.RED);
-			} else {
-				res = prepaidCardController.process(cardCode, mainFrame.getAppState());
-			}
+            String cardCode = getCardCode(barcode);
+            if (cardCode == null) {
+                res.setMessage("INVALID CARD\nCan't read barcode");
+                res.setDisplayColor(Color.RED);
+            } else {
+                if (mainFrame.getAppState().isActCheckIn()) {
+                    res = prepaidCardController.process(cardCode, mainFrame.getAppState());
+                } else {
+
+                }
+            }
 		}
 		mainFrame.getInfoFrame().setText(res.getMessage());
 		mainFrame.getInfoFrame().setForeground(res.getDisplayColor());
