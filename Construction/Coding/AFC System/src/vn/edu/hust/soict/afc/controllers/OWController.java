@@ -55,20 +55,15 @@ public class OWController {
 	public DataResponse process(String ticketId, boolean isActCheckIn, Station selectedStation) {
 		DataResponse res = new DataResponse();
 		OneWayTicket owt = getTicket(ticketId);
-		if (owt == null) {
-			res.setMessage("INVALID TICKET\nCan't find this ticket");
-			res.setDisplayColor(Color.RED);
-		} else {
+		if (owt != null) {
 			if (owt.isActivated()) {
 				res.setMessage("INVALID TICKET\nThis ticket is no longer valid");
 				res.setDisplayColor(Color.RED);
 			} else {
 				if (isActCheckIn) {
-					try {
-						res = checkIn(selectedStation, owt);
-					} catch (SQLException e) {
-						/* Ignore */
-					}
+					res = checkIn(selectedStation, owt);
+				} else {
+					res = checkOut(selectedStation, owt);
 				}
 			}
 		}
@@ -82,7 +77,7 @@ public class OWController {
 	 * @return response of checkin operation
 	 * @throws SQLException
 	 */
-	public DataResponse checkIn(Station selectedStation, OneWayTicket oneWayTicket) throws SQLException {
+	public DataResponse checkIn(Station selectedStation, OneWayTicket oneWayTicket) {
 		DataResponse res = new DataResponse();
 		double currentPos = selectedStation.getDistance();
 		if (oneWayTicket.isCheckedIn()) {
@@ -100,6 +95,7 @@ public class OWController {
 				res.setGateOpen(true);
 				Timestamp incomeTime = new Timestamp(System.currentTimeMillis());
 				OWTripService.createTrip(oneWayTicket.getId(), selectedStation.getId(), incomeTime, true);
+				OWTicketService.updateTicket(oneWayTicket.getId(), true, false);
 			} else {
 				res.setMessage("INVALID TICKET\nWrong station to go !");
 				res.setDisplayColor(Color.RED);
@@ -117,7 +113,7 @@ public class OWController {
 	 * @return response of checkout operation
 	 * @throws SQLException
 	 */
-	public DataResponse checkOut(Station selectedStation, OneWayTicket oneWayTicket) throws SQLException {
+	public DataResponse checkOut(Station selectedStation, OneWayTicket oneWayTicket) {
 		DataResponse res = new DataResponse();
 		if (!oneWayTicket.isCheckedIn()) {
 			res.setMessage("INVALID ONE WAY TICKET\n "
@@ -147,12 +143,19 @@ public class OWController {
 		message = "OPENING GATE BY ONE WAY TICKET...\n"
 				+ "ID: " + oneWayTicket.getId() + ", balance: " + fareOnTicket + " eur\n"
 				+ "In reality: " + realFare + " eur";
-		OWTicketService.updateTicket(oneWayTicket.getId(), false, false);
+		OWTicketService.updateTicket(oneWayTicket.getId(), false, true);
 		res.setMessage(message);
 		res.setDisplayColor(Color.GREEN);
+		res.setGateOpen(true);
 		return res;
 	}
 	
+	/**
+	 * 
+	 * @param startStation
+	 * @param endStation
+	 * @return fare when checkout
+	 */
 	public static double getFare(Station startStation, Station endStation) {
 		double distance  = Math.abs(endStation.getDistance() - startStation.getDistance());
 		if (distance < BASE_DISTANCE) {
