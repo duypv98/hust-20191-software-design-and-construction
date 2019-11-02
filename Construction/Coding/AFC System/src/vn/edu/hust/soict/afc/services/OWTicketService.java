@@ -22,7 +22,6 @@ public class OWTicketService {
 	 * 
 	 * @param ticketCode
 	 * @return OneWayTicket
-	 * @throws SQLException
 	 */
 	public static OneWayTicket getTicketInfo(String ticketId) {
 		OneWayTicket owt = null;
@@ -49,6 +48,12 @@ public class OWTicketService {
 		return owt;
 	}
 
+	/**
+	 * 
+	 * @param ticketId
+	 * @param checkedIn
+	 * @param activated
+	 */
 	public static void updateTicket(String ticketId, boolean checkedIn, boolean activated) {
 		int isCheckedIn = checkedIn ? 1 : 0;
 		int isActivated = activated ? 1 : 0;

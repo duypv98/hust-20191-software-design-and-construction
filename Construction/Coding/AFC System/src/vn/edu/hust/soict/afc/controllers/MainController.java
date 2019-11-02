@@ -58,7 +58,7 @@ public class MainController {
 	public OWController getOwController() {
 		return owController;
 	}
-	
+
 	/**
 	 * @return the tfController
 	 */
@@ -72,7 +72,7 @@ public class MainController {
 	public void setOwController(OWController owController) {
 		this.owController = owController;
 	}
-	
+
 	/**
 	 * @param tfController
 	 */
@@ -108,24 +108,27 @@ public class MainController {
 			String ticketCode = getTicketCode(barcode);
 			if (ticketCode != null) {
 				String ticketId = TicketService.getTicketId(ticketCode);
-				String ticketType = ticketId.substring(0, 2);
-				if (ticketType.equalsIgnoreCase("OW")) {
-
-					res = owController.process(ticketId, mainFrame.getAppState().isActCheckIn(),
-							mainFrame.getAppState().getSelectedStation());
-
+				if (ticketId == null) {
+					res.setMessage("INVALID TICKET\nCan't find this ticket");
+					res.setDisplayColor(Color.RED);
 				} else {
-					// TODO Handle check by 24h Ticket
-					if (ticketType.equalsIgnoreCase("TF")) {
-						
-					res = tfController.process(ticketId, mainFrame.getAppState().isActCheckIn());
+
+					String ticketType = ticketId.substring(0, 2);
+					if (ticketType.equalsIgnoreCase("OW")) {
+
+						res = owController.process(ticketId, mainFrame.getAppState().isActCheckIn(),
+								mainFrame.getAppState().getSelectedStation());
+
+					} else if (ticketType.equalsIgnoreCase("TF")) {
+						res = tfController.process(ticketId, mainFrame.getAppState().isActCheckIn(),
+								mainFrame.getAppState().getSelectedStation());
 					}
 				}
+
 			}
 		} else {
-			// TODO Handle check by Prepaid Card
 			String cardCode = getCardCode(barcode);
-			if(cardCode == null) {
+			if (cardCode == null) {
 				res.setMessage("INVALID CARD\nCan't read barcode");
 				res.setDisplayColor(Color.RED);
 			} else {

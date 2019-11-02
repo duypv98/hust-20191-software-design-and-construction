@@ -31,7 +31,6 @@ public class PrepaidCardController {
 		try {
 			prepaidCard = PrepaidCardService.getPrepaidCardInfo(cardCode);
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
 		}
 		if (prepaidCard == null) {
 			res.setMessage("INVALID CARD\nCan't find this ticket");
