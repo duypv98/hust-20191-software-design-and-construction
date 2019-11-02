@@ -65,7 +65,8 @@ public class MainController {
 		try {
 			ticketCode = ticketRecognizer.process(barcode);
 		} catch (InvalidIDException e) {
-			/* Ignore */
+			res.setMessage("INVALID TICKET\nCan't read barcode");
+			res.setDisplayColor(Color.RED);
 		}
 		return ticketCode;
 	}
@@ -74,27 +75,25 @@ public class MainController {
 		String barcode = mainFrame.getBarcodeInputField().getText();
 		if (mainFrame.getAppState().isByTicket()) {
 			String ticketCode = getTicketCode(barcode);
-			if (ticketCode == null) {
-				res.setMessage("INVALID TICKET\nCan't read barcode");
-				res.setDisplayColor(Color.RED);
-
-			} else {
+			if (ticketCode != null) {
 				String ticketId = TicketService.getTicketId(ticketCode);
 				String ticketType = ticketId.substring(0, 2);
 				if (ticketType.equalsIgnoreCase("OW")) {
 
 					res = owController.process(ticketId, mainFrame.getAppState().isActCheckIn(),
 							mainFrame.getAppState().getSelectedStation());
-
 				} else {
 					// TODO Handle check by 24h Ticket
 				}
-			}
+			}	
 		} else {
 			// TODO Handle check by Prepaid Card
 		}
 		mainFrame.getInfoFrame().setText(res.getMessage());
 		mainFrame.getInfoFrame().setForeground(res.getDisplayColor());
+		if (res.isGateOpen()) {
+			mainFrame.getGatePanel().open();
+		}
 	}
 
 	public static void main(String[] args) {

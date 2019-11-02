@@ -49,34 +49,25 @@ public class OWTicketService {
 		return owt;
 	}
 
-	public static void updateTicket(String ticketId, boolean checkedIn, boolean activated) throws SQLException {
-		int checkedInInt = 0;
-		int activatedInt = 0;
-		
-		if (checkedIn) {
-			checkedInInt = 1;
-		}
-		
-		if (activated) {
-			activatedInt = 1;
-		}
+	public static void updateTicket(String ticketId, boolean checkedIn, boolean activated) {
+		int isCheckedIn = checkedIn ? 1 : 0;
+		int isActivated = activated ? 1 : 0;
 		
         String sql = "UPDATE oneway_ticket SET " 
 	    		+ "checked_in=?, "
 	    		+ "activated=?" + " WHERE "
 	    		+ "id=?";
         
-        client.open();
-		PreparedStatement ps = client.getConnection().prepareStatement(sql);
-		ps.setInt(1, checkedInInt);
-		ps.setInt(2, activatedInt);
-		ps.setString(3, ticketId);
-		
-		ps.executeUpdate();
+        try {
+        	client.open();
+    		PreparedStatement ps = client.getConnection().prepareStatement(sql);
+    		ps.setInt(1, isCheckedIn);
+    		ps.setInt(2, isActivated);
+    		ps.setString(3, ticketId);
+    		
+    		ps.executeUpdate();
+        } catch (SQLException e) {
+			System.err.println("Can't update due to SQL Error");
+		}
 	}
-	
-	public static void main(String[] args) throws SQLException {
-		updateTicket("OW201910300002", true, true);
-	}
-	
 }
