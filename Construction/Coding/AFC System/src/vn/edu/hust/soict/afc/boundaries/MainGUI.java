@@ -39,7 +39,7 @@ public class MainGUI extends JFrame {
 	private Map<String, Station> listStations;
 	private DefaultListModel<String> listBarcode;
 	private List<String> stationKeys;
-	private GateBoundary gatePanel;
+	private GateBoundary gatePanel
 
 	/**
 	 * Auto-generated JWT Config

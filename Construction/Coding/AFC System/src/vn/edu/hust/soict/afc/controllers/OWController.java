@@ -108,10 +108,10 @@ public class OWController {
 		return res;
 	}
 
-	
-	
 	/**
 	 * 
+	 * @param ticketId
+	 * @param isActCheckIn
 	 * @param selectedStation
 	 * @param oneWayTicket
 	 * @return response of checkout operation

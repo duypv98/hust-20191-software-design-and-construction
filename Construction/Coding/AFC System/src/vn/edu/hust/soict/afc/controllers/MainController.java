@@ -29,17 +29,19 @@ public class MainController {
 	public MainGUI mainFrame;
 	public static TicketRecognizer ticketRecognizer;
 	private OWController owController;
+	private TFController tfController;
 	public static CardScanner cardScanner;
 	private PrepaidCardController prepaidCardController = new PrepaidCardController();
 
 	/**
-	 *
+	 * 
 	 */
 	public MainController() {
 		res = new DataResponse();
 		ticketRecognizer = TicketRecognizer.getInstance();
 		cardScanner = CardScanner.getInstance();
 		setOwController(new OWController());
+		setTfController(new TFController());
 		mainFrame = new MainGUI();
 		mainFrame.getBtnEnter().addActionListener(new ActionListener() {
 
@@ -56,12 +58,26 @@ public class MainController {
 	public OWController getOwController() {
 		return owController;
 	}
+	
+	/**
+	 * @return the tfController
+	 */
+	public TFController getTfController() {
+		return tfController;
+	}
 
 	/**
 	 * @param owController the owController to set
 	 */
 	public void setOwController(OWController owController) {
 		this.owController = owController;
+	}
+	
+	/**
+	 * @param tfController
+	 */
+	public void setTfController(TFController tfController) {
+		this.tfController = tfController;
 	}
 
 	public String getTicketCode(String barcode) {
@@ -97,10 +113,15 @@ public class MainController {
 
 					res = owController.process(ticketId, mainFrame.getAppState().isActCheckIn(),
 							mainFrame.getAppState().getSelectedStation());
+
 				} else {
 					// TODO Handle check by 24h Ticket
+					if (ticketType.equalsIgnoreCase("TF")) {
+						
+					res = tfController.process(ticketId, mainFrame.getAppState().isActCheckIn());
+					}
 				}
-			}	
+			}
 		} else {
 			// TODO Handle check by Prepaid Card
 			String cardCode = getCardCode(barcode);
