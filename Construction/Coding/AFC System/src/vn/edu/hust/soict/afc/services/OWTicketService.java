@@ -16,32 +16,67 @@ import vn.edu.hust.soict.afc.entities.OneWayTicket;
  */
 public class OWTicketService {
 
-	/**
-	 * 
-	 */
 	private static BaseDataClient client = new BaseDataClient();
 
-	public static OneWayTicket getTicketInfo(String ticketCode) throws SQLException {
+	/**
+	 * 
+	 * @param ticketCode
+	 * @return OneWayTicket
+	 * @throws SQLException
+	 */
+	public static OneWayTicket getTicketInfo(String ticketId) {
 		OneWayTicket owt = null;
-		String sql = "SELECT id, embarkation_id, disembarkation_id, checked_in, fare, activated FROM oneway_ticket WHERE ticket_code = ?";
+		String sql = "SELECT embarkation_id, disembarkation_id, checked_in, fare, activated FROM oneway_ticket WHERE id = ?";
+		try {
+			client.open();
+			PreparedStatement ps = client.getConnection().prepareStatement(sql);
+			ps.setString(1, ticketId);
 
-		client.open();
-		PreparedStatement ps = client.getConnection().prepareStatement(sql);
-		ps.setString(1, ticketCode);
+			ResultSet rs = ps.executeQuery();
 
-		ResultSet rs = ps.executeQuery();
-
-		if (rs.first()) {
-			owt = new OneWayTicket();
-			owt.setId(rs.getString("id"));
-			owt.setEmbarkationId(rs.getInt("embarkation_id"));
-			owt.setDisembarkationId(rs.getInt("disembarkation_id"));
-			owt.setCheckedIn(rs.getBoolean("checked_in"));
-			owt.setFare(rs.getDouble("fare"));
-			owt.setActivated(rs.getBoolean("activated"));
+			if (rs.first()) {
+				owt = new OneWayTicket();
+				owt.setId(ticketId);
+				owt.setEmbarkationId(rs.getInt("embarkation_id"));
+				owt.setDisembarkationId(rs.getInt("disembarkation_id"));
+				owt.setCheckedIn(rs.getBoolean("checked_in"));
+				owt.setFare(rs.getDouble("fare"));
+				owt.setActivated(rs.getBoolean("activated"));
+			}
+		} catch (SQLException e) {
+			/* Ignore */
 		}
-
 		return owt;
 	}
 
+	public static void updateTicket(String ticketId, boolean checkedIn, boolean activated) throws SQLException {
+		int checkedInInt = 0;
+		int activatedInt = 0;
+		
+		if (checkedIn) {
+			checkedInInt = 1;
+		}
+		
+		if (activated) {
+			activatedInt = 1;
+		}
+		
+        String sql = "UPDATE oneway_ticket SET " 
+	    		+ "checked_in=?, "
+	    		+ "activated=?" + " WHERE "
+	    		+ "id=?";
+        
+        client.open();
+		PreparedStatement ps = client.getConnection().prepareStatement(sql);
+		ps.setInt(1, checkedInInt);
+		ps.setInt(2, activatedInt);
+		ps.setString(3, ticketId);
+		
+		ps.executeUpdate();
+	}
+	
+	public static void main(String[] args) throws SQLException {
+		updateTicket("OW201910300002", true, true);
+	}
+	
 }
