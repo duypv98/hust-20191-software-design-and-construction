@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package vn.edu.hust.soict.afc.common;
 
@@ -14,19 +14,19 @@ import java.sql.SQLException;
 public class BaseDataClient {
 
 	/**
-	 * 
+	 *
 	 */
 	private static String DRIVER = "com.mysql.cj.jdbc.Driver";
 
 	private static String DB_URL = "jdbc:mysql://localhost:3306/afc";
 	private static String DB_USER = "root";
-	private static String DB_PWD = "admin1";
+	private static String DB_PWD = "root";
 
 	public Connection connection = null;
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	public BaseDataClient() {
 		try {
@@ -39,7 +39,7 @@ public class BaseDataClient {
 
 	/**
 	 * @throws SQLException
-	 * 
+	 *
 	 */
 	public void open() throws SQLException {
 		try {
@@ -54,7 +54,7 @@ public class BaseDataClient {
 
 	/**
 	 * @throws SQLException
-	 * 
+	 *
 	 */
 	public void close() throws SQLException {
 		try {

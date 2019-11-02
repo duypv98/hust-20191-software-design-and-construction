@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package vn.edu.hust.soict.afc.controllers;
 
@@ -12,6 +12,7 @@ import javax.swing.ImageIcon;
 
 import hust.soict.se.customexception.InvalidIDException;
 import hust.soict.se.recognizer.TicketRecognizer;
+import hust.soict.se.scanner.CardScanner;
 import vn.edu.hust.soict.afc.boundaries.MainGUI;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.services.TicketService;
@@ -28,13 +29,16 @@ public class MainController {
 	public MainGUI mainFrame;
 	public static TicketRecognizer ticketRecognizer;
 	private OWController owController;
+	public static CardScanner cardScanner;
+	private PrepaidCardController prepaidCardController = new PrepaidCardController();
 
 	/**
-	 * 
+	 *
 	 */
 	public MainController() {
 		res = new DataResponse();
 		ticketRecognizer = TicketRecognizer.getInstance();
+		cardScanner = CardScanner.getInstance();
 		setOwController(new OWController());
 		mainFrame = new MainGUI();
 		mainFrame.getBtnEnter().addActionListener(new ActionListener() {
@@ -71,6 +75,17 @@ public class MainController {
 		return ticketCode;
 	}
 
+	public String getCardCode(String barcode) {
+		String cardCode = null;
+		try {
+			cardCode = cardScanner.process(barcode);
+		} catch (InvalidIDException e) {
+			res.setMessage("INVALID CARD\nCan't read barcode");
+			res.setDisplayColor(Color.RED);
+		}
+		return cardCode;
+	}
+
 	public void commandEnter() {
 		String barcode = mainFrame.getBarcodeInputField().getText();
 		if (mainFrame.getAppState().isByTicket()) {
@@ -88,6 +103,13 @@ public class MainController {
 			}	
 		} else {
 			// TODO Handle check by Prepaid Card
+			String cardCode = getCardCode(barcode);
+			if(cardCode == null) {
+				res.setMessage("INVALID CARD\nCan't read barcode");
+				res.setDisplayColor(Color.RED);
+			} else {
+				res = prepaidCardController.process(cardCode, mainFrame.getAppState());
+			}
 		}
 		mainFrame.getInfoFrame().setText(res.getMessage());
 		mainFrame.getInfoFrame().setForeground(res.getDisplayColor());
