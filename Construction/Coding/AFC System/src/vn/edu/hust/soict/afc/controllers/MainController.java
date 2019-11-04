@@ -8,8 +8,6 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
-
 import hust.soict.se.customexception.InvalidIDException;
 import hust.soict.se.recognizer.TicketRecognizer;
 import hust.soict.se.scanner.CardScanner;
@@ -25,8 +23,6 @@ import vn.edu.hust.soict.afc.services.TicketService;
 public class MainController {
 
 	public static DataResponse res;
-	public static ImageIcon closeGate = new ImageIcon(MainGUI.class.getResource("/closegate.jpg"));
-	public static ImageIcon openGate = new ImageIcon(MainGUI.class.getResource("/opengate.jpg"));
 	public MainGUI mainFrame;
 	public static TicketRecognizer ticketRecognizer;
 	private OWController owController;
