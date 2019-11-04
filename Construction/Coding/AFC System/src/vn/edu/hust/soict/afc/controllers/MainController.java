@@ -15,6 +15,7 @@ import hust.soict.se.recognizer.TicketRecognizer;
 import hust.soict.se.scanner.CardScanner;
 import vn.edu.hust.soict.afc.boundaries.MainGUI;
 import vn.edu.hust.soict.afc.common.DataResponse;
+import vn.edu.hust.soict.afc.services.PPCardService;
 import vn.edu.hust.soict.afc.services.TicketService;
 
 /**
@@ -29,17 +30,20 @@ public class MainController {
 	public MainGUI mainFrame;
 	public static TicketRecognizer ticketRecognizer;
 	private OWController owController;
+	private TFController tfController;
+	private PPController ppController;
 	public static CardScanner cardScanner;
-	private PrepaidCardController prepaidCardController = new PrepaidCardController();
 
 	/**
-	 *
+	 * 
 	 */
 	public MainController() {
 		res = new DataResponse();
 		ticketRecognizer = TicketRecognizer.getInstance();
 		cardScanner = CardScanner.getInstance();
 		setOwController(new OWController());
+		setTfController(new TFController());
+		setPpController(new PPController());
 		mainFrame = new MainGUI();
 		mainFrame.getBtnEnter().addActionListener(new ActionListener() {
 
@@ -58,10 +62,38 @@ public class MainController {
 	}
 
 	/**
+	 * @return the tfController
+	 */
+	public TFController getTfController() {
+		return tfController;
+	}
+
+	/**
 	 * @param owController the owController to set
 	 */
 	public void setOwController(OWController owController) {
 		this.owController = owController;
+	}
+
+	/**
+	 * @param tfController
+	 */
+	public void setTfController(TFController tfController) {
+		this.tfController = tfController;
+	}
+
+	/**
+	 * @return the ppController
+	 */
+	public PPController getPpController() {
+		return ppController;
+	}
+
+	/**
+	 * @param ppController the ppController to set
+	 */
+	public void setPpController(PPController ppController) {
+		this.ppController = ppController;
 	}
 
 	public String getTicketCode(String barcode) {
@@ -69,7 +101,8 @@ public class MainController {
 		try {
 			ticketCode = ticketRecognizer.process(barcode);
 		} catch (InvalidIDException e) {
-			/* Ignore */
+			res.setMessage("INVALID TICKET\nCan't read barcode");
+			res.setDisplayColor(Color.RED);
 		}
 		return ticketCode;
 	}
@@ -79,7 +112,8 @@ public class MainController {
 		try {
 			cardCode = cardScanner.process(barcode);
 		} catch (InvalidIDException e) {
-			/* Ignore */
+			res.setMessage("INVALID CARD\nCan't read barcode");
+			res.setDisplayColor(Color.RED);
 		}
 		return cardCode;
 	}
@@ -88,38 +122,44 @@ public class MainController {
 		String barcode = mainFrame.getBarcodeInputField().getText();
 		if (mainFrame.getAppState().isByTicket()) {
 			String ticketCode = getTicketCode(barcode);
-			if (ticketCode == null) {
-				res.setMessage("INVALID TICKET\nCan't read barcode");
-				res.setDisplayColor(Color.RED);
-
-			} else {
+			if (ticketCode != null) {
 				String ticketId = TicketService.getTicketId(ticketCode);
-				String ticketType = ticketId.substring(0, 2);
-				if (ticketType.equalsIgnoreCase("OW")) {
-
-					res = owController.process(ticketId, mainFrame.getAppState().isActCheckIn(),
-							mainFrame.getAppState().getSelectedStation());
-
+				if (ticketId == null) {
+					res.setMessage("INVALID TICKET\nCan't find this ticket");
+					res.setDisplayColor(Color.RED);
 				} else {
-					// TODO Handle check by 24h Ticket
+
+					String ticketType = ticketId.substring(0, 2);
+					if (ticketType.equalsIgnoreCase("OW")) {
+
+						res = owController.process(ticketId, mainFrame.getAppState().isActCheckIn(),
+								mainFrame.getAppState().getSelectedStation());
+
+					} else if (ticketType.equalsIgnoreCase("TF")) {
+						res = tfController.process(ticketId, mainFrame.getAppState().isActCheckIn(),
+								mainFrame.getAppState().getSelectedStation());
+					}
 				}
+
 			}
 		} else {
-			// TODO Handle check by Prepaid Card
-            String cardCode = getCardCode(barcode);
-            if (cardCode == null) {
-                res.setMessage("INVALID CARD\nCan't read barcode");
-                res.setDisplayColor(Color.RED);
-            } else {
-                if (mainFrame.getAppState().isActCheckIn()) {
-                    res = prepaidCardController.process(cardCode, mainFrame.getAppState());
-                } else {
-
-                }
-            }
+			String cardCode = getCardCode(barcode);
+			if (cardCode != null) {
+				String cardId = PPCardService.getCardId(cardCode);
+				if (cardId == null) {
+					res.setMessage("INVALID CARD\nCan't find this card");
+					res.setDisplayColor(Color.RED);
+				} else {
+					res = ppController.process(cardId, mainFrame.getAppState().isActCheckIn(),
+							mainFrame.getAppState().getSelectedStation());
+				}
+			}
 		}
 		mainFrame.getInfoFrame().setText(res.getMessage());
 		mainFrame.getInfoFrame().setForeground(res.getDisplayColor());
+		if (res.isGateOpen()) {
+			mainFrame.getGatePanel().open();
+		}
 	}
 
 	public static void main(String[] args) {

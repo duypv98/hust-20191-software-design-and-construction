@@ -22,7 +22,6 @@ public class OWTicketService {
 	 * 
 	 * @param ticketCode
 	 * @return OneWayTicket
-	 * @throws SQLException
 	 */
 	public static OneWayTicket getTicketInfo(String ticketId) {
 		OneWayTicket owt = null;
@@ -49,4 +48,31 @@ public class OWTicketService {
 		return owt;
 	}
 
+	/**
+	 * 
+	 * @param ticketId
+	 * @param checkedIn
+	 * @param activated
+	 */
+	public static void updateTicket(String ticketId, boolean checkedIn, boolean activated) {
+		int isCheckedIn = checkedIn ? 1 : 0;
+		int isActivated = activated ? 1 : 0;
+		
+        String sql = "UPDATE oneway_ticket SET " 
+	    		+ "checked_in=?, "
+	    		+ "activated=?" + " WHERE "
+	    		+ "id=?";
+        
+        try {
+        	client.open();
+    		PreparedStatement ps = client.getConnection().prepareStatement(sql);
+    		ps.setInt(1, isCheckedIn);
+    		ps.setInt(2, isActivated);
+    		ps.setString(3, ticketId);
+    		
+    		ps.executeUpdate();
+        } catch (SQLException e) {
+			System.err.println("Can't update due to SQL Error");
+		}
+	}
 }
