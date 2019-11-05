@@ -16,6 +16,7 @@ import hust.soict.se.scanner.CardScanner;
 import vn.edu.hust.soict.afc.boundaries.MainGUI;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.services.PPCardService;
+import vn.edu.hust.soict.afc.services.PPCardServiceImpl;
 import vn.edu.hust.soict.afc.services.TicketService;
 
 /**
@@ -31,11 +32,11 @@ public class MainController {
 	public static TicketRecognizer ticketRecognizer;
 	private OWController owController;
 	private TFController tfController;
-	private PPController ppController;
+	private PPCardService pPCardService = new PPCardServiceImpl();
 	public static CardScanner cardScanner;
 
 	/**
-	 * 
+	 *
 	 */
 	public MainController() {
 		res = new DataResponse();
@@ -43,7 +44,6 @@ public class MainController {
 		cardScanner = CardScanner.getInstance();
 		setOwController(new OWController());
 		setTfController(new TFController());
-		setPpController(new PPController());
 		mainFrame = new MainGUI();
 		mainFrame.getBtnEnter().addActionListener(new ActionListener() {
 
@@ -80,20 +80,6 @@ public class MainController {
 	 */
 	public void setTfController(TFController tfController) {
 		this.tfController = tfController;
-	}
-
-	/**
-	 * @return the ppController
-	 */
-	public PPController getPpController() {
-		return ppController;
-	}
-
-	/**
-	 * @param ppController the ppController to set
-	 */
-	public void setPpController(PPController ppController) {
-		this.ppController = ppController;
 	}
 
 	public String getTicketCode(String barcode) {
@@ -145,14 +131,8 @@ public class MainController {
 		} else {
 			String cardCode = getCardCode(barcode);
 			if (cardCode != null) {
-				String cardId = PPCardService.getCardId(cardCode);
-				if (cardId == null) {
-					res.setMessage("INVALID CARD\nCan't find this card");
-					res.setDisplayColor(Color.RED);
-				} else {
-					res = ppController.process(cardId, mainFrame.getAppState().isActCheckIn(),
-							mainFrame.getAppState().getSelectedStation());
-				}
+				res = pPCardService.process(cardCode, mainFrame.getAppState().isActCheckIn(),
+						mainFrame.getAppState().getSelectedStation());
 			}
 		}
 		mainFrame.getInfoFrame().setText(res.getMessage());

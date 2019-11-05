@@ -2,34 +2,43 @@ package vn.edu.hust.soict.afc.entities;
 
 public class PrepaidCard {
 
-    private String id;
-    private double balance;
-    private boolean checkedIn;
+	private String id;
+	private String cardCode;
+	private double balance;
+	private boolean checkedIn;
 
-    public PrepaidCard() {
-    }
+	public PrepaidCard() {
+	}
 
-    public String getId() {
-        return id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public double getBalance() {
-        return balance;
-    }
+	public String getCardCode() {
+		return cardCode;
+	}
 
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
+	public void setCardCode(String cardCode) {
+		this.cardCode = cardCode;
+	}
 
-    public boolean isCheckedIn() {
-        return checkedIn;
-    }
+	public double getBalance() {
+		return balance;
+	}
 
-    public void setCheckedIn(boolean checkedIn) {
-        this.checkedIn = checkedIn;
-    }
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
+
+	public boolean isCheckedIn() {
+		return checkedIn;
+	}
+
+	public void setCheckedIn(boolean checkedIn) {
+		this.checkedIn = checkedIn;
+	}
 }

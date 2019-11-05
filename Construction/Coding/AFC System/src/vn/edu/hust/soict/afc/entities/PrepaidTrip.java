@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package vn.edu.hust.soict.afc.entities;
 
@@ -10,24 +10,21 @@ import java.sql.Timestamp;
  *
  */
 public class PrepaidTrip {
-	
+
 	private int id;
 	private String cardId;
 	private int incomeStationId;
 	private Timestamp incomeTime;
 	private int outcomeStationId;
 	private Timestamp outcomeTime;
-	private Double realFare;
+	private double realFare;
 	private boolean onTrip;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public PrepaidTrip() {
-		this.outcomeStationId = 0;
-		this.outcomeTime = null;
-		this.realFare = 0.0;
-		this.onTrip = true;
+
 	}
 
 	/**
@@ -117,14 +114,14 @@ public class PrepaidTrip {
 	/**
 	 * @return the realFare
 	 */
-	public Double getRealFare() {
+	public double getRealFare() {
 		return realFare;
 	}
 
 	/**
 	 * @param realFare the realFare to set
 	 */
-	public void setRealFare(Double realFare) {
+	public void setRealFare(double realFare) {
 		this.realFare = realFare;
 	}
 

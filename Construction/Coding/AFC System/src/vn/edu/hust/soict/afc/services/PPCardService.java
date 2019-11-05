@@ -1,68 +1,22 @@
 package vn.edu.hust.soict.afc.services;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import vn.edu.hust.soict.afc.common.BaseDataClient;
+import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.entities.PrepaidCard;
+import vn.edu.hust.soict.afc.entities.Station;
 
-public class PPCardService {
-    private static BaseDataClient client = new BaseDataClient();
-    
-    public static String getCardId(String cardCode) {
-    	String id = null;
-    	String sql = "SELECT id FROM prepaid_card WHERE card_code = ?";
-    	
-    	try {
-			client.open();
-			PreparedStatement ps = client.getConnection().prepareStatement(sql);
-			ps.setString(1, cardCode);
-			
-			ResultSet rs = ps.executeQuery();
-			if (rs.first()) {
-				id = rs.getString("id");
-			}
-		} catch (SQLException e) {
-			/* Ignore */
-		}
-    	return id;
-    }
+public interface PPCardService {
 
-    public static PrepaidCard getPrepaidCardInfo(String cardId) {
-        String sql = "SELECT id, balance, checked_in FROM prepaid_card WHERE id = ?";
-        PrepaidCard prepaidCard = null;
-        try {
-        	client.open();
-            PreparedStatement ps = client.getConnection().prepareStatement(sql);
-            ps.setString(1, cardId);
+    double BASE_DISTANCE = 5.0;
+    double BASE_FARE = 1.9;
+    double ADDED_DISTANCE = 2.0;
+    double ADDED_FARE = 0.4;
 
-            ResultSet rs = ps.executeQuery();
+    DataResponse process(String cardId, boolean isActCheckIn, Station selectedStation);
 
-            if (rs.first()) {
-                prepaidCard = new PrepaidCard();
-                prepaidCard.setId(cardId);
-                prepaidCard.setBalance(rs.getDouble("balance"));
-                prepaidCard.setCheckedIn(rs.getBoolean("checked_in"));
-            }
-        } catch (SQLException e) {
-			/* Ignore */
-		}
-        return prepaidCard;
-    }
+    DataResponse checkIn(Station selectedStation, PrepaidCard prepaidCard);
 
-    public static void updateCard(String card_id, boolean checkedIn, double newBalance) {
-        String sql = "UPDATE prepaid_card SET checked_in = ?, balance = ? WHERE id = ?";
-        try {
-        	client.open();
-        	PreparedStatement ps = client.getConnection().prepareStatement(sql);
-        	ps.setBoolean(1, checkedIn);
-        	ps.setDouble(2, newBalance);
-        	ps.setString(3, card_id);
-        	
-        	ps.executeUpdate();
-        } catch (SQLException e) {
-			// TODO: handle exception
-		}
-    }
+    DataResponse checkOut(Station selectedStation, PrepaidCard prepaidCard);
+
+    double getFare(Station incomeStation, Station outcomeStation);
+
 }
