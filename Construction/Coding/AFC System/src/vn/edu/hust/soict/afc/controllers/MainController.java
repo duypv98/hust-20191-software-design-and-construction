@@ -4,7 +4,6 @@
 package vn.edu.hust.soict.afc.controllers;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,8 +14,6 @@ import hust.soict.se.recognizer.TicketRecognizer;
 import hust.soict.se.scanner.CardScanner;
 import vn.edu.hust.soict.afc.boundaries.MainGUI;
 import vn.edu.hust.soict.afc.common.DataResponse;
-import vn.edu.hust.soict.afc.services.PPCardService;
-import vn.edu.hust.soict.afc.services.PPCardServiceImpl;
 import vn.edu.hust.soict.afc.services.TicketService;
 
 /**
@@ -32,7 +29,7 @@ public class MainController {
 	public static TicketRecognizer ticketRecognizer;
 	private OWController owController;
 	private TFController tfController;
-	private PPCardService pPCardService = new PPCardServiceImpl();
+	private PPController pPController = new PPController();
 	public static CardScanner cardScanner;
 
 	/**
@@ -93,17 +90,6 @@ public class MainController {
 		return ticketCode;
 	}
 
-	public String getCardCode(String barcode) {
-		String cardCode = null;
-		try {
-			cardCode = cardScanner.process(barcode);
-		} catch (InvalidIDException e) {
-			res.setMessage("INVALID CARD\nCan't read barcode");
-			res.setDisplayColor(Color.RED);
-		}
-		return cardCode;
-	}
-
 	public void commandEnter() {
 		String barcode = mainFrame.getBarcodeInputField().getText();
 		if (mainFrame.getAppState().isByTicket()) {
@@ -129,27 +115,13 @@ public class MainController {
 
 			}
 		} else {
-			String cardCode = getCardCode(barcode);
-			if (cardCode != null) {
-				res = pPCardService.process(cardCode, mainFrame.getAppState().isActCheckIn(),
-						mainFrame.getAppState().getSelectedStation());
-			}
+			mainFrame.getAppState().setItemBarcode(barcode);
+			res = pPController.process(mainFrame.getAppState());
 		}
 		mainFrame.getInfoFrame().setText(res.getMessage());
 		mainFrame.getInfoFrame().setForeground(res.getDisplayColor());
 		if (res.isGateOpen()) {
 			mainFrame.getGatePanel().open();
 		}
-	}
-
-	public static void main(String[] args) {
-		final MainController mainController = new MainController();
-		EventQueue.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				mainController.mainFrame.setVisible(true);
-			}
-		});
 	}
 }

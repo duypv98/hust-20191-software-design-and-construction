@@ -1,7 +1,6 @@
 package vn.edu.hust.soict.afc.boundaries;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -119,28 +118,12 @@ public class MainGUI extends JFrame {
 	public JTextPane getInfoFrame() {
 		return infoFrame;
 	}
-	
+
 	/**
 	 * @return the gatePanel
 	 */
 	public GateBoundary getGatePanel() {
 		return gatePanel;
-	}
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainGUI frame = new MainGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
 	}
 
 	public void init() {
@@ -363,7 +346,7 @@ public class MainGUI extends JFrame {
 		license.setBounds(563, 562, 287, 25);
 		license.setEditable(false);
 		contentPanel.add(license);
-		
+
 		gatePanel = new GateBoundary();
 		contentPanel.add(gatePanel);
 	}
