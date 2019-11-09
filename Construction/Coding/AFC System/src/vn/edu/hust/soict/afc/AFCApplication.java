@@ -2,17 +2,17 @@ package vn.edu.hust.soict.afc;
 
 import java.awt.EventQueue;
 
-import vn.edu.hust.soict.afc.controllers.MainController;
+import vn.edu.hust.soict.afc.boundaries.MainGUI;
 
 public class AFCApplication {
 
 	public static void main(String[] args) {
-		final MainController mainController = new MainController();
+		final MainGUI mainGUI = new MainGUI();
 		EventQueue.invokeLater(new Runnable() {
 
 			@Override
 			public void run() {
-				mainController.mainFrame.setVisible(true);
+				mainGUI.setVisible(true);
 			}
 		});
 	}

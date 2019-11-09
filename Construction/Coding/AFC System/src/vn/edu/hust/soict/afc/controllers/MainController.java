@@ -4,15 +4,10 @@
 package vn.edu.hust.soict.afc.controllers;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.ImageIcon;
 
 import hust.soict.se.customexception.InvalidIDException;
 import hust.soict.se.recognizer.TicketRecognizer;
-import hust.soict.se.scanner.CardScanner;
-import vn.edu.hust.soict.afc.boundaries.MainGUI;
+import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.services.TicketService;
 
@@ -22,33 +17,18 @@ import vn.edu.hust.soict.afc.services.TicketService;
  */
 public class MainController {
 
-	public static DataResponse res;
-	public static ImageIcon closeGate = new ImageIcon(MainGUI.class.getResource("/closegate.jpg"));
-	public static ImageIcon openGate = new ImageIcon(MainGUI.class.getResource("/opengate.jpg"));
-	public MainGUI mainFrame;
 	public static TicketRecognizer ticketRecognizer;
 	private OWController owController;
 	private TFController tfController;
 	private PPController pPController = new PPController();
-	public static CardScanner cardScanner;
 
 	/**
 	 *
 	 */
 	public MainController() {
-		res = new DataResponse();
 		ticketRecognizer = TicketRecognizer.getInstance();
-		cardScanner = CardScanner.getInstance();
 		setOwController(new OWController());
 		setTfController(new TFController());
-		mainFrame = new MainGUI();
-		mainFrame.getBtnEnter().addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				commandEnter();
-			}
-		});
 	}
 
 	/**
@@ -84,44 +64,41 @@ public class MainController {
 		try {
 			ticketCode = ticketRecognizer.process(barcode);
 		} catch (InvalidIDException e) {
-			res.setMessage("INVALID TICKET\nCan't read barcode");
-			res.setDisplayColor(Color.RED);
+
 		}
 		return ticketCode;
 	}
 
-	public void commandEnter() {
-		String barcode = mainFrame.getBarcodeInputField().getText();
-		if (mainFrame.getAppState().isByTicket()) {
+	public DataResponse commandEnter(AppState appState) {
+		String barcode = appState.getItemBarcode();
+		if (appState.isByTicket()) {
 			String ticketCode = getTicketCode(barcode);
 			if (ticketCode != null) {
 				String ticketId = TicketService.getTicketId(ticketCode);
 				if (ticketId == null) {
+					DataResponse res = new DataResponse();
 					res.setMessage("INVALID TICKET\nCan't find this ticket");
 					res.setDisplayColor(Color.RED);
+					return res;
 				} else {
 
 					String ticketType = ticketId.substring(0, 2);
 					if (ticketType.equalsIgnoreCase("OW")) {
-
-						res = owController.process(ticketId, mainFrame.getAppState().isActCheckIn(),
-								mainFrame.getAppState().getSelectedStation());
+						return owController.process(ticketId, appState.isActCheckIn(), appState.getSelectedStation());
 
 					} else if (ticketType.equalsIgnoreCase("TF")) {
-						res = tfController.process(ticketId, mainFrame.getAppState().isActCheckIn(),
-								mainFrame.getAppState().getSelectedStation());
+						return tfController.process(ticketId, appState.isActCheckIn(), appState.getSelectedStation());
 					}
 				}
-
+			} else {
+				DataResponse res = new DataResponse();
+				res.setMessage("INVALID TICKET\nCan't read barcode");
+				res.setDisplayColor(Color.RED);
+				return res;
 			}
 		} else {
-			mainFrame.getAppState().setItemBarcode(barcode);
-			res = pPController.process(mainFrame.getAppState());
+			return pPController.process(appState);
 		}
-		mainFrame.getInfoFrame().setText(res.getMessage());
-		mainFrame.getInfoFrame().setForeground(res.getDisplayColor());
-		if (res.isGateOpen()) {
-			mainFrame.getGatePanel().open();
-		}
+		return null;
 	}
 }

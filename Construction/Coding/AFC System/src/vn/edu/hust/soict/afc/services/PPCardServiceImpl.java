@@ -14,6 +14,13 @@ import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.entities.PrepaidCard;
 import vn.edu.hust.soict.afc.entities.PrepaidTrip;
 import vn.edu.hust.soict.afc.entities.Station;
+import vn.edu.hust.soict.afc.exception.BalanceLessThanBaseFareException;
+import vn.edu.hust.soict.afc.exception.CantFindCardException;
+import vn.edu.hust.soict.afc.exception.CantReadBarCodeException;
+import vn.edu.hust.soict.afc.exception.CardOnlyCheckInException;
+import vn.edu.hust.soict.afc.exception.CardOnlyCheckOutException;
+import vn.edu.hust.soict.afc.exception.FailedTransactionException;
+import vn.edu.hust.soict.afc.exception.NotEnoughBalanceException;
 import vn.edu.hust.soict.afc.utils.Fare;
 
 public class PPCardServiceImpl implements PPCardService {
@@ -41,34 +48,23 @@ public class PPCardServiceImpl implements PPCardService {
 		try {
 			cardCode = cardScanner.process(barCode);
 		} catch (InvalidIDException e) {
-			DataResponse res = new DataResponse();
-			res.setMessage("INVALID CARD\nCan't read barcode");
-			res.setDisplayColor(Color.RED);
-			return res;
+			throw new CantReadBarCodeException("INVALID CARD\nCan't read barcode");
 		}
 
 		PrepaidCard prepaidCard = pPCardDAO.findByCardCode(cardCode);
 
 		if (prepaidCard == null) {
-			DataResponse res = new DataResponse();
-			res.setMessage("INVALID CARD\nCan't find this card");
-			res.setDisplayColor(Color.RED);
-			return res;
+			throw new CantFindCardException("INVALID CARD\nCan't find this card");
 		}
 
 		if (prepaidCard.getBalance() < Fare.BASE_FARE) {
-			DataResponse res = new DataResponse();
-			res.setMessage("INVALID CARD\nThe balance on the card is less than the base fare" + "\nCardID: "
-					+ prepaidCard.getId() + "\nBalance: " + prepaidCard.getBalance() + " eur");
-			res.setDisplayColor(Color.RED);
-			return res;
+			String message = "INVALID CARD\nThe balance on the card is less than the base fare" + "\nCardID: "
+					+ prepaidCard.getId() + "\nBalance: " + prepaidCard.getBalance() + " eur";
+			throw new BalanceLessThanBaseFareException(message);
 		}
 
 		if (prepaidCard.isCheckedIn()) {
-			DataResponse res = new DataResponse();
-			res.setMessage("INVALID CARD\nThis card just only for checkout");
-			res.setDisplayColor(Color.RED);
-			return res;
+			throw new CardOnlyCheckOutException("INVALID CARD\nThis card just only for checkout");
 		}
 
 		Date date = new Date();
@@ -91,11 +87,7 @@ public class PPCardServiceImpl implements PPCardService {
 			res.setGateOpen(true);
 			return res;
 		} else {
-			DataResponse res = new DataResponse();
-			res.setMessage("Save Transaction Failed");
-			res.setDisplayColor(Color.RED);
-			res.setGateOpen(false);
-			return res;
+			throw new FailedTransactionException("Save Transaction Failed");
 		}
 	}
 
@@ -116,26 +108,17 @@ public class PPCardServiceImpl implements PPCardService {
 		try {
 			cardCode = cardScanner.process(barCode);
 		} catch (InvalidIDException e) {
-			DataResponse res = new DataResponse();
-			res.setMessage("INVALID CARD\nCan't read barcode");
-			res.setDisplayColor(Color.RED);
-			return res;
+			throw new CantReadBarCodeException("INVALID CARD\nCan't read barcode");
 		}
 
 		PrepaidCard prepaidCard = pPCardDAO.findByCardCode(cardCode);
 
 		if (prepaidCard == null) {
-			DataResponse res = new DataResponse();
-			res.setMessage("INVALID CARD\nCan't find this card");
-			res.setDisplayColor(Color.RED);
-			return res;
+			throw new CantFindCardException("INVALID CARD\nCan't find this card");
 		}
 
 		if (!prepaidCard.isCheckedIn()) {
-			DataResponse res = new DataResponse();
-			res.setMessage("INVALID TICKET\nThis card just only for checkin");
-			res.setDisplayColor(Color.RED);
-			return res;
+			throw new CardOnlyCheckInException("INVALID TICKET\nThis card just only for checkin");
 		}
 
 		PrepaidTrip prepaidTrip = pPTripDAO.findByCardIdAndOnTrip(prepaidCard.getId(), true);
@@ -143,14 +126,12 @@ public class PPCardServiceImpl implements PPCardService {
 		double realFare = Fare.caculate(incomeStation, outcomeStation);
 
 		if (realFare > prepaidCard.getBalance()) {
-			DataResponse res = new DataResponse();
-			res.setMessage("INVALID CARD\nNot enough balance\nYour Balance: " + prepaidCard.getBalance() + " eur "
-					+ "\nBut you have to pay: " + realFare + " eur");
-			res.setDisplayColor(Color.RED);
-			return res;
+			String message = "INVALID CARD\nNot enough balance\nYour Balance: " + prepaidCard.getBalance() + " eur "
+					+ "\nBut you have to pay: " + realFare + " eur";
+			throw new NotEnoughBalanceException(message);
 		}
 
-		double newBalance = prepaidCard.getBalance() - realFare;
+		double newBalance = Fare.roundedOneDigitAfterAComma(prepaidCard.getBalance() - realFare);
 
 		prepaidCard.setBalance(newBalance);
 		prepaidCard.setCheckedIn(false);
@@ -170,11 +151,7 @@ public class PPCardServiceImpl implements PPCardService {
 			res.setGateOpen(true);
 			return res;
 		} else {
-			DataResponse res = new DataResponse();
-			res.setMessage("Save Transaction Failed");
-			res.setDisplayColor(Color.RED);
-			res.setGateOpen(false);
-			return res;
+			throw new FailedTransactionException("Save Transaction Failed");
 		}
 	}
 

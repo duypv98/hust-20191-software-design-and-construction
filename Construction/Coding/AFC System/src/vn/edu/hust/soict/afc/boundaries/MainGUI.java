@@ -13,6 +13,7 @@ import java.util.Map;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -27,7 +28,9 @@ import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
 import vn.edu.hust.soict.afc.common.AppState;
+import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.entities.Station;
+import vn.edu.hust.soict.afc.exception.ExceptionHandler;
 import vn.edu.hust.soict.afc.services.StationService;
 
 public class MainGUI extends JFrame {
@@ -48,6 +51,10 @@ public class MainGUI extends JFrame {
 	private JTextField barcodeInputField;
 	private JButton btnEnter;
 	private JTextPane infoFrame;
+
+	private ExceptionHandler exceptionHandler = new ExceptionHandler();
+	public static ImageIcon closeGate = new ImageIcon(MainGUI.class.getResource("/closegate.jpg"));
+	public static ImageIcon openGate = new ImageIcon(MainGUI.class.getResource("/opengate.jpg"));
 
 	/**
 	 * @return the listStations
@@ -349,5 +356,19 @@ public class MainGUI extends JFrame {
 
 		gatePanel = new GateBoundary();
 		contentPanel.add(gatePanel);
+
+		btnEnter.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				appState.setItemBarcode(barcodeInputField.getText());
+				DataResponse res = exceptionHandler.catchException(appState);
+				infoFrame.setText(res.getMessage());
+				infoFrame.setForeground(res.getDisplayColor());
+				if (res.isGateOpen()) {
+					gatePanel.open();
+				}
+			}
+		});
 	}
 }

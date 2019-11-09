@@ -25,7 +25,7 @@ public class Fare {
 		return roundedOneDigitAfterAComma(BASE_FARE + ADDED_FARE * numberOfAddedDistance);
 	}
 
-	private static double roundedOneDigitAfterAComma(double number) {
+	public static double roundedOneDigitAfterAComma(double number) {
 		return Math.round(number * 10) / 10.0;
 	}
 }
