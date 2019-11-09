@@ -20,6 +20,18 @@ public class Station {
 	}
 
 	/**
+	 * 
+	 * @param id
+	 * @param stationName
+	 * @param distance
+	 */
+	public Station(int id, String stationName, double distance) {
+		this.id = id;
+		this.stationName = stationName;
+		this.distance = distance;
+	}
+
+	/**
 	 * @return the id
 	 */
 	public int getId() {
