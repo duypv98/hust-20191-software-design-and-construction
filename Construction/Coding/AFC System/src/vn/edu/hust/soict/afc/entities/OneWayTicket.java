@@ -25,6 +25,27 @@ public class OneWayTicket {
 	}
 
 	/**
+	 * 
+	 * @param id
+	 * @param ticketCode
+	 * @param embarkationId
+	 * @param disembarkationId
+	 * @param fare
+	 * @param checkedIn
+	 * @param activated
+	 */
+	public OneWayTicket(String id, String ticketCode, int embarkationId, int disembarkationId, double fare,
+			boolean checkedIn, boolean activated) {
+		this.id = id;
+		this.ticketCode = ticketCode;
+		this.embarkationId = embarkationId;
+		this.disembarkationId = disembarkationId;
+		this.fare = fare;
+		this.checkedIn = checkedIn;
+		this.activated = activated;
+	}
+
+	/**
 	 * @return the id
 	 */
 	public String getId() {
