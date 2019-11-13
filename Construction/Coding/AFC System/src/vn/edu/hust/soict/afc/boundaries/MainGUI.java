@@ -1,7 +1,6 @@
 package vn.edu.hust.soict.afc.boundaries;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +13,7 @@ import java.util.Map;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -28,7 +28,9 @@ import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
 import vn.edu.hust.soict.afc.common.AppState;
+import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.entities.Station;
+import vn.edu.hust.soict.afc.exception.ExceptionHandler;
 import vn.edu.hust.soict.afc.services.StationService;
 
 public class MainGUI extends JFrame {
@@ -49,6 +51,10 @@ public class MainGUI extends JFrame {
 	private JTextField barcodeInputField;
 	private JButton btnEnter;
 	private JTextPane infoFrame;
+
+	private ExceptionHandler exceptionHandler = new ExceptionHandler();
+	public static ImageIcon closeGate = new ImageIcon(MainGUI.class.getResource("/closegate.jpg"));
+	public static ImageIcon openGate = new ImageIcon(MainGUI.class.getResource("/opengate.jpg"));
 
 	/**
 	 * @return the listStations
@@ -119,28 +125,12 @@ public class MainGUI extends JFrame {
 	public JTextPane getInfoFrame() {
 		return infoFrame;
 	}
-	
+
 	/**
 	 * @return the gatePanel
 	 */
 	public GateBoundary getGatePanel() {
 		return gatePanel;
-	}
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainGUI frame = new MainGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
 	}
 
 	public void init() {
@@ -363,8 +353,22 @@ public class MainGUI extends JFrame {
 		license.setBounds(563, 562, 287, 25);
 		license.setEditable(false);
 		contentPanel.add(license);
-		
+
 		gatePanel = new GateBoundary();
 		contentPanel.add(gatePanel);
+
+		btnEnter.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				appState.setItemBarcode(barcodeInputField.getText());
+				DataResponse res = exceptionHandler.catchException(appState);
+				infoFrame.setText(res.getMessage());
+				infoFrame.setForeground(res.getDisplayColor());
+				if (res.isGateOpen()) {
+					gatePanel.open();
+				}
+			}
+		});
 	}
 }
