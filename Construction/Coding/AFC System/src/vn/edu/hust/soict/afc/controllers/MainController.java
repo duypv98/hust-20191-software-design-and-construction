@@ -18,7 +18,7 @@ public class MainController {
 	public static TicketRecognizer ticketRecognizer;
 	private TicketService ticketService = new TicketService();
 	private OWController owController = new OWController();
-	private TFController tfController;
+	private TFController tfController = new TFController();
 	private PPController pPController = new PPController();
 
 	/**
@@ -26,21 +26,6 @@ public class MainController {
 	 */
 	public MainController() {
 		ticketRecognizer = TicketRecognizer.getInstance();
-		setTfController(new TFController());
-	}
-
-	/**
-	 * @return the tfController
-	 */
-	public TFController getTfController() {
-		return tfController;
-	}
-
-	/**
-	 * @param tfController
-	 */
-	public void setTfController(TFController tfController) {
-		this.tfController = tfController;
 	}
 
 	public String getTicketCode(String barcode) {
@@ -60,7 +45,7 @@ public class MainController {
 			if (ticketType.equalsIgnoreCase("OW")) {
 				return owController.process(appState);
 			} else if (ticketType.equalsIgnoreCase("TF")) {
-				//TODO Handler for 24h ticket
+				return tfController.process(appState);
 			}
 		} else {
 			return pPController.process(appState);
