@@ -107,7 +107,7 @@ public class OWTicketDAOImpl implements OWTicketDAO {
 	 */
 	@Override
 	public OneWayTicket findByTicketCode(String ticketCode) {
-		String sql = "SELECT embarkation_id, disembarkation_id, checked_in, fare, activated FROM oneway_ticket WHERE ticket_code = ?";
+		String sql = "SELECT id, ticket_code, embarkation_id, disembarkation_id, checked_in, fare, activated FROM oneway_ticket WHERE ticket_code = ?";
 		OneWayTicket oneWayTicket = null;
 		Connection conn = null;
 		try {
@@ -119,7 +119,7 @@ public class OWTicketDAOImpl implements OWTicketDAO {
 				oneWayTicket = mapToOneWayTicket(rs);
 			}
 		} catch (SQLException | ClassNotFoundException e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return oneWayTicket;
 	}
