@@ -10,6 +10,13 @@ public class PrepaidCard {
 	public PrepaidCard() {
 	}
 
+	public PrepaidCard(String id, String cardCode, double balance, boolean checkedIn) {
+		this.id = id;
+		this.cardCode = cardCode;
+		this.balance = balance;
+		this.checkedIn = checkedIn;
+	}
+
 	public String getId() {
 		return id;
 	}
