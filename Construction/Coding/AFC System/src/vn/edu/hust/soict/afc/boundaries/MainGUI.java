@@ -1,3 +1,12 @@
+/**
+ * @author duypv
+ * @date Oct 23, 2019
+ * @project afc_application
+ * @lecturer Nguyen Thi Thu Trang
+ * @class 111589
+ * 
+ * @description The Automated Fare Controller sumulation program
+ */
 package vn.edu.hust.soict.afc.boundaries;
 
 import java.awt.Color;
@@ -35,7 +44,7 @@ import vn.edu.hust.soict.afc.services.StationService;
 
 public class MainGUI extends JFrame {
 	/**
-	 * Define UI state
+	 * Define UI states
 	 */
 	private AppState appState;
 	private Map<String, Station> listStations;
@@ -133,6 +142,9 @@ public class MainGUI extends JFrame {
 		return gatePanel;
 	}
 
+	/**
+	 * Init state of GUI
+	 */
 	public void init() {
 		this.appState = new AppState();
 		this.listStations = new HashMap<String, Station>();
