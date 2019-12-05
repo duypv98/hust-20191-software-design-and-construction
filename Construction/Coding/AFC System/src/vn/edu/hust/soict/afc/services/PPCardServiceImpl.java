@@ -158,4 +158,9 @@ public class PPCardServiceImpl implements PPCardService {
 	private boolean saveTransactionForCheckOut(PrepaidCard prepaidCard, PrepaidTrip prepaidTrip) {
 		return pPCardDAO.update(prepaidCard) && pPTripDAO.update(prepaidTrip);
 	}
+	
+	public static void main(String[] args) throws InvalidIDException {
+		String barcode = "ABCDEFGH";
+		System.out.println(CardScanner.getInstance().process(barcode));
+	}
 }

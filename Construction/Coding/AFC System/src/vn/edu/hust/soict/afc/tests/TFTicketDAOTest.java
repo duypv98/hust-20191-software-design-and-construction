@@ -10,31 +10,35 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import vn.edu.hust.soict.afc.DAO.TFTicketDAOImpl;
+
 import vn.edu.hust.soict.afc.entities.TwentyFourTicket;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TFTicketDAOTest {
 
-	TFTicketDAOImpl dao = new TFTicketDAOImpl();
-	TwentyFourTicket ticket = new TwentyFourTicket("1", "TF201910300000", new Timestamp(new Date().getTime()), false);
-
+	private TFTicketDAOImpl dao = new TFTicketDAOImpl();
+	private TwentyFourTicket ticket = new TwentyFourTicket("1", "TF201910300000", new Timestamp(new Date().getTime()), false);
+	
 	@Test
 	public void test01FindById() {
-		assertEquals(dao.findById(ticket.getId()), ticket);
+		TwentyFourTicket foundedTicket = dao.findById(ticket.getId());
+		assertEquals(foundedTicket.getTicketCode(), ticket.getTicketCode());
+		assertEquals(foundedTicket.isCheckedIn(), ticket.isCheckedIn());
 	}
 	
 	@Test
-	public void test02Update() {
-		TwentyFourTicket newTicket= new TwentyFourTicket(ticket.getId(), ticket.getTicketCode(), new Timestamp(new Date().getTime() + 3600 * 1000), true);
-		assertEquals(dao.update(newTicket), true);
-		assertEquals(dao.findById(ticket.getId()), newTicket);
-		ticket = newTicket;
+	public void test02FindByTicketCode() {
+		TwentyFourTicket foundedTicket = dao.findByTicketCode(ticket.getTicketCode());
+		assertEquals(foundedTicket.getId(), foundedTicket.getId());
+		assertEquals(foundedTicket.isCheckedIn(), ticket.isCheckedIn());
 	}
 	
 	@Test
-	public void test03FindByTicketCode() {
-		assertEquals(dao.findByTicketCode(ticket.getTicketCode()), ticket);
+	public void test03Update() {
+		TwentyFourTicket newTicket = ticket;
+		ticket.setCheckedIn(true);
+		assertEquals(dao.update(newTicket), true);	
 	}
 
 }

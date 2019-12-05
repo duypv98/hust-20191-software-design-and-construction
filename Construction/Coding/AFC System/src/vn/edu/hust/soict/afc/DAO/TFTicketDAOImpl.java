@@ -20,7 +20,7 @@ public class TFTicketDAOImpl implements TFTicketDAO {
 	@Override
 	public TwentyFourTicket findById(String id) {
 		TwentyFourTicket tft = null;
-		String sql = "SELECT valid_time, checkedIn FROM twentyfour_ticket WHERE id = ?";
+		String sql = "SELECT id, ticket_code, valid_time, checked_in FROM tf_ticket WHERE id = ?";
 		try {
 			Connection conn = ConnectionUtils.getMyConnection();
 			PreparedStatement ps = conn.prepareStatement(sql);
@@ -49,6 +49,7 @@ public class TFTicketDAOImpl implements TFTicketDAO {
 		TwentyFourTicket tft;
 		tft = new TwentyFourTicket();
 		tft.setId(rs.getString("id"));
+		tft.setTicketCode(rs.getString("ticket_code"));
 		tft.setValidTime(rs.getTimestamp("valid_time"));
 		tft.setCheckedIn(rs.getBoolean("checked_in"));
 		return tft;

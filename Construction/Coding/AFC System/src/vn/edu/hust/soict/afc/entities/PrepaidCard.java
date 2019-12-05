@@ -17,6 +17,13 @@ public class PrepaidCard {
 		this.checkedIn = checkedIn;
 	}
 
+	public boolean isComparedWith(PrepaidCard card) {
+		return this.getId() == card.getId() &&
+			   this.getCardCode() == card.getCardCode() &&
+			   this.getBalance() == card.getBalance() &&
+			   this.isCheckedIn() == card.isCheckedIn();
+	}
+
 	public String getId() {
 		return id;
 	}

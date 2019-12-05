@@ -25,7 +25,7 @@ public class OWTicketDAOImpl implements OWTicketDAO {
 	@Override
 	public OneWayTicket findById(String id) {
 		OneWayTicket owt = null;
-		String sql = "SELECT embarkation_id, disembarkation_id, checked_in, fare, activated FROM oneway_ticket WHERE id = ?";
+		String sql = "SELECT id, ticket_code, embarkation_id, disembarkation_id, checked_in, fare, activated FROM oneway_ticket WHERE id = ?";
 		try {
 			Connection conn = ConnectionUtils.getMyConnection();
 			PreparedStatement ps = conn.prepareStatement(sql);
@@ -53,6 +53,7 @@ public class OWTicketDAOImpl implements OWTicketDAO {
 		OneWayTicket owt;
 		owt = new OneWayTicket();
 		owt.setId(rs.getString("id"));
+		owt.setTicketCode(rs.getString("ticket_code"));;
 		owt.setEmbarkationId(rs.getInt("embarkation_id"));
 		owt.setDisembarkationId(rs.getInt("disembarkation_id"));
 		owt.setCheckedIn(rs.getBoolean("checked_in"));
@@ -122,5 +123,12 @@ public class OWTicketDAOImpl implements OWTicketDAO {
 			e.printStackTrace();
 		}
 		return oneWayTicket;
+	}
+	
+	public static void main(String[] args) {
+//		14ffab8aebbc5204
+		OWTicketDAOImpl owTicketDAOImpl = new OWTicketDAOImpl();
+		OneWayTicket owt = owTicketDAOImpl.findById("OW201910300000");
+		System.out.println(owt.getId());
 	}
 }

@@ -17,6 +17,14 @@ public class Station {
 	 * 
 	 */
 	public Station() {
+		
+	}
+
+	public Station(int id, String stationName, double distance) {
+		super();
+		this.id = id;
+		this.stationName = stationName;
+		this.distance = distance;
 	}
 
 	/**
