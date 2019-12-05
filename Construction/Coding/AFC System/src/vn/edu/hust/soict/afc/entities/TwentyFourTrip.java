@@ -11,8 +11,20 @@ public class TwentyFourTrip {
 	private Timestamp outcomeTime;
 	private boolean onTrip;
 	
-public TwentyFourTrip() {
+	public TwentyFourTrip() {
 		
+	}
+
+	public TwentyFourTrip(int id, String ticketId, int incomeStationId, Timestamp incomeTime, int outcomeStationId,
+			Timestamp outcomeTime, boolean onTrip) {
+		super();
+		this.id = id;
+		this.ticketId = ticketId;
+		this.incomeStationId = incomeStationId;
+		this.incomeTime = incomeTime;
+		this.outcomeStationId = outcomeStationId;
+		this.outcomeTime = outcomeTime;
+		this.onTrip = onTrip;
 	}
 
 	public int getId() {

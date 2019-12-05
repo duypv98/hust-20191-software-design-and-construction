@@ -66,7 +66,7 @@ public class TFTicketServiceImpl implements TFTicketService {
 		Timestamp timestamp = new Timestamp(new Date().getTime());
 		long newValueOfDay = timestamp.getTime() + 24 * 60 * 60 * 1000;
 
-		if (!isFirstTime && twentyFourTicket.getValidTime().after(timestamp)) {
+		if (!isFirstTime && twentyFourTicket.getValidTime().before(timestamp)) {
 			throw new NoLongerValidTicketException("INVALID TICKET\nThis ticket is no longer valid");
 		}
 		

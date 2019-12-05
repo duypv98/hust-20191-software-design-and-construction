@@ -82,9 +82,9 @@ public class OWTripDAOImpl implements OWTripDAO {
 			}
 			
 			if (oneWayTrip.getRealFare() == 0.0) {
-				ps.setNull(6, java.sql.Types.TIMESTAMP);
+				ps.setNull(6, java.sql.Types.DOUBLE);
 			} else {
-				ps.setTimestamp(6, oneWayTrip.getOutcomeTime());
+				ps.setDouble(6, oneWayTrip.getRealFare());
 			}
 			
 			ps.setBoolean(7, oneWayTrip.isOnTrip());

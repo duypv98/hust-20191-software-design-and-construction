@@ -25,10 +25,52 @@ public class OneWayTicket {
 	}
 
 	/**
+	 * 
+	 * @param id
+	 * @param ticketCode
+	 * @param embarkationId
+	 * @param disembarkationId
+	 * @param fare
+	 * @param checkedIn
+	 * @param activated
+	 */
+	public OneWayTicket(String id, String ticketCode, int embarkationId, int disembarkationId, double fare,
+			boolean checkedIn, boolean activated) {
+		this.id = id;
+		this.ticketCode = ticketCode;
+		this.embarkationId = embarkationId;
+		this.disembarkationId = disembarkationId;
+		this.fare = fare;
+		this.checkedIn = checkedIn;
+		this.activated = activated;
+	}	
+
+//	public boolean equalsTo(OneWayTicket oneWayTicket) {
+//		return  
+//			this.id == oneWayTicket.id &&
+//			this.ticketCode == oneWayTicket.ticketCode &&
+//			this.embarkationId == oneWayTicket.embarkationId &&
+//			this.disembarkationId == oneWayTicket.disembarkationId &&
+//			this.fare == oneWayTicket.fare &&
+//			this.checkedIn == oneWayTicket.checkedIn &&
+//			this.activated == oneWayTicket.activated;
+//	}
+
+	/**
 	 * @return the id
 	 */
 	public String getId() {
 		return id;
+	}
+
+	public boolean isComparedWith(OneWayTicket ticket) {
+		return this.getId() == ticket.getId() &&
+			   this.getTicketCode() == ticket.getTicketCode() &&
+			   this.getEmbarkationId() == ticket.getEmbarkationId() &&
+			   this.getDisembarkationId() == ticket.getDisembarkationId() &&
+			   this.getFare() == ticket.getFare() &&
+			   this.isCheckedIn() == ticket.isCheckedIn() &&
+			   this.isActivated() == ticket.isActivated();
 	}
 
 	/**

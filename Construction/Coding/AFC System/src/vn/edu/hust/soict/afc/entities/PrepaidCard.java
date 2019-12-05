@@ -10,6 +10,20 @@ public class PrepaidCard {
 	public PrepaidCard() {
 	}
 
+	public PrepaidCard(String id, String cardCode, double balance, boolean checkedIn) {
+		this.id = id;
+		this.cardCode = cardCode;
+		this.balance = balance;
+		this.checkedIn = checkedIn;
+	}
+
+	public boolean isComparedWith(PrepaidCard card) {
+		return this.getId() == card.getId() &&
+			   this.getCardCode() == card.getCardCode() &&
+			   this.getBalance() == card.getBalance() &&
+			   this.isCheckedIn() == card.isCheckedIn();
+	}
+
 	public String getId() {
 		return id;
 	}
