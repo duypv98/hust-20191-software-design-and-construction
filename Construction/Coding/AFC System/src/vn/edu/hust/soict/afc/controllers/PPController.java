@@ -5,9 +5,22 @@ import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.services.PPCardService;
 import vn.edu.hust.soict.afc.services.PPCardServiceImpl;
 
+/**
+ * prepaid card's controller
+ * @author duycv
+ * @date Dec 6, 2019
+ * @project AFC System
+ * @lecturer Nguyen Thi Thu Trang
+ * @class 111589
+ */
 public class PPController {
 	private PPCardService pPCardService = new PPCardServiceImpl();
 
+	/**
+	 * navigation prepaid card's business process
+	 * @param appState
+	 * @return
+	 */
 	public DataResponse process(AppState appState) {
 		if (appState.isActCheckIn()) {
 			return pPCardService.checkIn(appState.getItemBarcode(), appState.getSelectedStation());

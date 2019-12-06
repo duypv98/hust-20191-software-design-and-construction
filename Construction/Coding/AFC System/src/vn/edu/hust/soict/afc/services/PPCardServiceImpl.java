@@ -23,25 +23,23 @@ import vn.edu.hust.soict.afc.exception.FailedTransactionException;
 import vn.edu.hust.soict.afc.exception.NotEnoughBalanceException;
 import vn.edu.hust.soict.afc.utils.Fare;
 
+/**
+ * prepaid card's service implement
+ * @author duycv
+ * @date Dec 6, 2019
+ * @project AFC System
+ * @lecturer Nguyen Thi Thu Trang
+ * @class 111589
+ */
 public class PPCardServiceImpl implements PPCardService {
 
 	private PPCardDAO pPCardDAO = new PPCardDAOImpl();
 	private PPTripDAO pPTripDAO = new PPTripDAOImpl();
 	private CardScanner cardScanner = CardScanner.getInstance();
 
-	/**
-	 *
-	 */
 	public PPCardServiceImpl() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * vn.edu.hust.soict.afc.services.PPCardService#checkIn(vn.edu.hust.soict.afc.
-	 * entities.Station, vn.edu.hust.soict.afc.entities.PrepaidCard)
-	 */
 	@Override
 	public DataResponse checkIn(String barCode, Station incomeStation) {
 		String cardCode;
@@ -95,13 +93,6 @@ public class PPCardServiceImpl implements PPCardService {
 		return pPCardDAO.update(prepaidCard) && pPTripDAO.save(prepaidTrip);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * vn.edu.hust.soict.afc.services.PPCardService#checkOut(vn.edu.hust.soict.afc.
-	 * entities.Station, vn.edu.hust.soict.afc.entities.PrepaidCard)
-	 */
 	@Override
 	public DataResponse checkOut(String barCode, Station outcomeStation) {
 		String cardCode;
@@ -155,12 +146,13 @@ public class PPCardServiceImpl implements PPCardService {
 		}
 	}
 
+	/**
+	 * save checkout's transaction
+	 * @param prepaidCard prepaid card
+	 * @param prepaidTrip prepaid card's trip
+	 * @return success or failed
+	 */
 	private boolean saveTransactionForCheckOut(PrepaidCard prepaidCard, PrepaidTrip prepaidTrip) {
 		return pPCardDAO.update(prepaidCard) && pPTripDAO.update(prepaidTrip);
-	}
-	
-	public static void main(String[] args) throws InvalidIDException {
-		String barcode = "ABCDEFGH";
-		System.out.println(CardScanner.getInstance().process(barcode));
 	}
 }
