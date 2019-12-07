@@ -25,27 +25,23 @@ import vn.edu.hust.soict.afc.exception.TicketOnlyCheckInException;
 import vn.edu.hust.soict.afc.exception.TicketOnlyCheckOutException;
 
 /**
- * @author Professor
- *
+ * twenty-four hour ticket's service implement
+ * @author hainn
+ * @date Dec 7, 2019
+ * @project AFC System
+ * @lecturer Nguyen Thi Thu Trang
+ * @class 111589
  */
+
 public class TFTicketServiceImpl implements TFTicketService {
 
 	private TFTicketDAO tFTicketDAO = new TFTicketDAOImpl();
 	private TFTripDAO tFTripDAO = new TFTripDAOImpl();
 	private TicketRecognizer ticketRecognizer = TicketRecognizer.getInstance();
 
-	/**
-	 * 
-	 */
 	public TFTicketServiceImpl() {
 	}
 
-	/**
-	 * 
-	 * @param barCode
-	 * @param station
-	 * @return
-	 */
 	@Override
 	public DataResponse checkIn(String barCode, Station station) {
 		String ticketCode;
@@ -165,11 +161,12 @@ public class TFTicketServiceImpl implements TFTicketService {
 	}
 	
 	/**
-	 * 
-	 * @param twentyFourTicket
-	 * @param twentyFourTrip
-	 * @return
+	 * save checkout's transaction
+	 * @param TwentyFourTicket twenty-four hour ticket
+	 * @param TwentyFourTrip twenty-four hour ticket's trip
+	 * @return success or failed
 	 */
+	
 	private boolean saveTransactionForCheckOut(TwentyFourTicket twentyFourTicket, TwentyFourTrip twentyFourTrip) {
 		return tFTicketDAO.update(twentyFourTicket) && tFTripDAO.update(twentyFourTrip);
 	}

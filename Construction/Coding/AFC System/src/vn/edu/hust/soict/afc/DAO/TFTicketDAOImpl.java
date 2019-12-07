@@ -8,15 +8,19 @@ import java.sql.SQLException;
 import vn.edu.hust.soict.afc.entities.TwentyFourTicket;
 import vn.edu.hust.soict.afc.utils.ConnectionUtils;
 
+/**
+*
+* @author hainn
+* @date Dec 7, 2019
+* @project AFC System
+* @lecturer Nguyen Thi Thu Trang
+* @class 111589
+*
+* @description Twenty-Four Hour Ticket DAO implement
+*/
 
 public class TFTicketDAOImpl implements TFTicketDAO {
 	
-	
-	/**
-	 * 
-	 * @param id
-	 * @return
-	 */
 	@Override
 	public TwentyFourTicket findById(String id) {
 		TwentyFourTicket tft = null;
@@ -38,13 +42,6 @@ public class TFTicketDAOImpl implements TFTicketDAO {
 		return tft;
 	}
 
-
-
-	/**
-	 * @param rs
-	 * @return
-	 * @throws SQLException
-	 */
 	private TwentyFourTicket mapToTwentyFourTicket(ResultSet rs) throws SQLException {
 		TwentyFourTicket tft;
 		tft = new TwentyFourTicket();
@@ -54,8 +51,6 @@ public class TFTicketDAOImpl implements TFTicketDAO {
 		return tft;
 	}
 	
-	
-
 	@Override
 	public boolean update(TwentyFourTicket twentyFourTicket) {
 		String sql = "UPDATE tf_ticket SET ticket_code = ?, valid_time = ?, checked_in = ? WHERE id = ?";
@@ -78,11 +73,6 @@ public class TFTicketDAOImpl implements TFTicketDAO {
 		return false;
 	}
 
-	/**
-	 * 
-	 * @param ticketCode
-	 * @return
-	 */
 	@Override
 	public TwentyFourTicket findByTicketCode(String ticketCode) {
 		String sql = "SELECT id, ticket_code, valid_time, checked_in FROM tf_ticket WHERE ticket_code = ?";

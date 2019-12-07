@@ -8,14 +8,19 @@ import java.sql.SQLException;
 import vn.edu.hust.soict.afc.entities.TwentyFourTrip;
 import vn.edu.hust.soict.afc.utils.ConnectionUtils;
 
+/**
+*
+* @author hainn
+* @date Dec 7, 2019
+* @project AFC System
+* @lecturer Nguyen Thi Thu Trang
+* @class 111589
+*
+* @description twenty-four hour ticket's trip DAO Implement
+*/
+
 public class TFTripDAOImpl implements TFTripDAO {
 
-	/**
-	 * 
-	 * @param ticketId
-	 * @return TwentyFourTrip
-	 * @throws SQLException
-	 */
 	@Override
 	public TwentyFourTrip findByTicketIdAndOnTrip(String ticketId, boolean onTrip) {
 		TwentyFourTrip twentyFourTrip = null;
@@ -45,11 +50,6 @@ public class TFTripDAOImpl implements TFTripDAO {
 		return twentyFourTrip;
 	}
 
-	/**
-	 * 
-	 * @param twentyFourTrip
-	 * @return
-	 */
 	@Override
 	public boolean save(TwentyFourTrip twentyFourTrip) {
 		String sql = "INSERT INTO twentyfour_trip (ticket_id, income_station_id, income_time, outcome_station_id, outcome_time, ontrip)"
@@ -99,11 +99,6 @@ public class TFTripDAOImpl implements TFTripDAO {
 		return false;
 	}
 
-	/**
-	 * 
-	 * @param twentyFourTrip
-	 * @return
-	 */
 	@Override
 	public boolean update(TwentyFourTrip twentyFourTrip) {
 		
