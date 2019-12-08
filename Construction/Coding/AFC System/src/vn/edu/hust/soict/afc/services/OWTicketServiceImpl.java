@@ -25,8 +25,8 @@ import vn.edu.hust.soict.afc.exception.NoLongerValidTicketException;
 import vn.edu.hust.soict.afc.exception.TicketOnlyCheckInException;
 import vn.edu.hust.soict.afc.exception.TicketOnlyCheckOutException;
 import vn.edu.hust.soict.afc.exception.WrongStationException;
+import vn.edu.hust.soict.afc.utils.AFareCalculator;
 import vn.edu.hust.soict.afc.utils.Distance;
-import vn.edu.hust.soict.afc.utils.Fare;
 
 /**
  * @author Professor
@@ -37,11 +37,13 @@ public class OWTicketServiceImpl implements OWTicketService {
 	private OWTicketDAO oWTicketDAO = new OWTicketDAOImpl();
 	private OWTripDAO oWTripDAO = new OWTripDAOImpl();
 	private TicketRecognizer ticketRecognizer = TicketRecognizer.getInstance();
+	private AFareCalculator fareCalculator;
 
 	/**
 	 * 
 	 */
-	public OWTicketServiceImpl() {
+	public OWTicketServiceImpl(AFareCalculator fareCalculator) {
+		this.fareCalculator = fareCalculator;
 	}
 	
 	/**
@@ -147,7 +149,7 @@ public class OWTicketServiceImpl implements OWTicketService {
 		OneWayTrip oneWayTrip = oWTripDAO.findByTicketId(oneWayTicket.getId());
 		
 		Station incomeStation = StationService.getStationInfo(oneWayTrip.getIncomeStationId());
-		double realFare = Fare.caculate(incomeStation, station);
+		double realFare = fareCalculator.caculate(incomeStation, station);
 		double realDistance = Distance.calculate(incomeStation, station);
 		
 		if (realFare > oneWayTicket.getFare()) {

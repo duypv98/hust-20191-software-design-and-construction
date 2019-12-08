@@ -4,6 +4,7 @@ import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.services.PPCardService;
 import vn.edu.hust.soict.afc.services.PPCardServiceImpl;
+import vn.edu.hust.soict.afc.utils.AFareCalculator;
 
 /**
  * prepaid card's controller
@@ -14,7 +15,11 @@ import vn.edu.hust.soict.afc.services.PPCardServiceImpl;
  * @class 111589
  */
 public class PPController {
-	private PPCardService pPCardService = new PPCardServiceImpl();
+	private PPCardService pPCardService;
+	
+	public PPController(AFareCalculator fareCalculator) {
+		pPCardService = new PPCardServiceImpl(fareCalculator);
+	}
 
 	/**
 	 * navigation prepaid card's business process

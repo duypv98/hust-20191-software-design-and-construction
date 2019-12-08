@@ -8,6 +8,8 @@ import hust.soict.se.recognizer.TicketRecognizer;
 import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.services.TicketService;
+import vn.edu.hust.soict.afc.utils.AFareCalculator;
+import vn.edu.hust.soict.afc.utils.FareCalculatorByDistance;
 
 /**
  * @author Professor
@@ -17,15 +19,19 @@ public class MainController {
 
 	public static TicketRecognizer ticketRecognizer;
 	private TicketService ticketService = new TicketService();
-	private OWController owController = new OWController();
-	private TFController tfController = new TFController();
-	private PPController pPController = new PPController();
+	private OWController owController;
+	private TFController tfController;
+	private PPController pPController;
+	private AFareCalculator fareCalculator = new FareCalculatorByDistance();
 
 	/**
 	 *
 	 */
 	public MainController() {
 		ticketRecognizer = TicketRecognizer.getInstance();
+		owController = new OWController(fareCalculator);
+		tfController = new TFController();
+		pPController = new PPController(fareCalculator);
 	}
 
 	public String getTicketCode(String barcode) {
