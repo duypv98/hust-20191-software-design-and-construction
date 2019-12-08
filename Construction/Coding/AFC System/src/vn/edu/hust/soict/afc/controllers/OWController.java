@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package vn.edu.hust.soict.afc.controllers;
 
@@ -13,13 +13,14 @@ import vn.edu.hust.soict.afc.utils.IFareCalculator;
  * @author iProfessor
  *
  */
-public class OWController {
+public class OWController implements ItemController {
 	private IItemService oWTicketService;
-	
+
 	public OWController(IFareCalculator fareCalculator) {
 		oWTicketService = new OWTicketServiceImpl(fareCalculator);
 	}
-	
+
+	@Override
 	public DataResponse process(AppState appState) {
 		if (appState.isActCheckIn()) {
 			return oWTicketService.checkIn(appState.getItemBarcode(), appState.getSelectedStation());

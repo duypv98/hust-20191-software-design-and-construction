@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package vn.edu.hust.soict.afc.controllers;
 
@@ -12,9 +12,10 @@ import vn.edu.hust.soict.afc.services.TFTicketServiceImpl;
  * @author iProfessor
  *
  */
-public class TFController {
+public class TFController implements ItemController {
 	private IItemService tFTicketService = new TFTicketServiceImpl();
-	
+
+	@Override
 	public DataResponse process(AppState appState) {
 		if (appState.isActCheckIn()) {
 			return tFTicketService.checkIn(appState.getItemBarcode(), appState.getSelectedStation());
