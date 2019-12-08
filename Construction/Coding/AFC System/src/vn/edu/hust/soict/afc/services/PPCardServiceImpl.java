@@ -10,6 +10,8 @@ import vn.edu.hust.soict.afc.DAO.PPCardDAO;
 import vn.edu.hust.soict.afc.DAO.PPCardDAOImpl;
 import vn.edu.hust.soict.afc.DAO.PPTripDAO;
 import vn.edu.hust.soict.afc.DAO.PPTripDAOImpl;
+import vn.edu.hust.soict.afc.DAO.StationDAO;
+import vn.edu.hust.soict.afc.DAO.StationDAOImpl;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.entities.PrepaidCard;
 import vn.edu.hust.soict.afc.entities.PrepaidTrip;
@@ -38,6 +40,7 @@ public class PPCardServiceImpl implements PPCardService {
 	private PPTripDAO pPTripDAO = new PPTripDAOImpl();
 	private CardScanner cardScanner = CardScanner.getInstance();
 	private AFareCalculator fareCalculator;
+	private StationDAO stationDAO = new StationDAOImpl();
 	/**
 	 *
 	 */
@@ -118,7 +121,7 @@ public class PPCardServiceImpl implements PPCardService {
 		}
 
 		PrepaidTrip prepaidTrip = pPTripDAO.findByCardIdAndOnTrip(prepaidCard.getId(), true);
-		Station incomeStation = StationService.getStationInfo(prepaidTrip.getIncomeStationId());
+		Station incomeStation = stationDAO.findById(prepaidTrip.getIncomeStationId());
 		double realFare = fareCalculator.caculate(incomeStation, outcomeStation);
 
 		if (realFare > prepaidCard.getBalance()) {

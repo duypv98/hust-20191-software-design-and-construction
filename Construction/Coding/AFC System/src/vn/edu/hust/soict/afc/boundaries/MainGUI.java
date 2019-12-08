@@ -4,7 +4,7 @@
  * @project afc_application
  * @lecturer Nguyen Thi Thu Trang
  * @class 111589
- * 
+ *
  * @description The Automated Fare Controller sumulation program
  */
 package vn.edu.hust.soict.afc.boundaries;
@@ -36,11 +36,12 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
+import vn.edu.hust.soict.afc.DAO.StationDAO;
+import vn.edu.hust.soict.afc.DAO.StationDAOImpl;
 import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.entities.Station;
 import vn.edu.hust.soict.afc.exception.ExceptionHandler;
-import vn.edu.hust.soict.afc.services.StationService;
 
 public class MainGUI extends JFrame {
 	/**
@@ -64,6 +65,7 @@ public class MainGUI extends JFrame {
 	private ExceptionHandler exceptionHandler = new ExceptionHandler();
 	public static ImageIcon closeGate = new ImageIcon(MainGUI.class.getResource("/closegate.jpg"));
 	public static ImageIcon openGate = new ImageIcon(MainGUI.class.getResource("/opengate.jpg"));
+	private StationDAO stationDAO = new StationDAOImpl();
 
 	/**
 	 * @return the listStations
@@ -151,7 +153,7 @@ public class MainGUI extends JFrame {
 		this.stationKeys = new ArrayList<String>();
 		this.listBarcode = new DefaultListModel<String>();
 		List<Station> allStations = new ArrayList<>();
-		allStations = StationService.getAllStations();
+		allStations = stationDAO.findAll();
 		for (int i = 0; i < allStations.size(); i++) {
 			listStations.put(allStations.get(i).getStationName(), allStations.get(i));
 			stationKeys.add(allStations.get(i).getStationName());
