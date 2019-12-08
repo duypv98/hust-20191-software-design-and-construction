@@ -13,13 +13,14 @@ import vn.edu.hust.soict.afc.utils.AFareCalculator;
  * @author iProfessor
  *
  */
-public class OWController {
+public class OWController implements ItemController {
 	private OWTicketService oWTicketService;
 	
 	public OWController(AFareCalculator fareCalculator) {
 		oWTicketService = new OWTicketServiceImpl(fareCalculator);
 	}
 	
+	@Override
 	public DataResponse process(AppState appState) {
 		if (appState.isActCheckIn()) {
 			return oWTicketService.checkIn(appState.getItemBarcode(), appState.getSelectedStation());

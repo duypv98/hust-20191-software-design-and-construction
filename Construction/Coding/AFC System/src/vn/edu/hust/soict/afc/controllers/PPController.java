@@ -14,9 +14,9 @@ import vn.edu.hust.soict.afc.utils.AFareCalculator;
  * @lecturer Nguyen Thi Thu Trang
  * @class 111589
  */
-public class PPController {
+public class PPController implements ItemController {
 	private PPCardService pPCardService;
-	
+
 	public PPController(AFareCalculator fareCalculator) {
 		pPCardService = new PPCardServiceImpl(fareCalculator);
 	}
@@ -26,6 +26,7 @@ public class PPController {
 	 * @param appState
 	 * @return
 	 */
+	@Override
 	public DataResponse process(AppState appState) {
 		if (appState.isActCheckIn()) {
 			return pPCardService.checkIn(appState.getItemBarcode(), appState.getSelectedStation());
