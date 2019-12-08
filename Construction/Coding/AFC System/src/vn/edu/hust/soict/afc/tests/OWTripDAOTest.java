@@ -12,7 +12,11 @@ import org.junit.runners.MethodSorters;
 import vn.edu.hust.soict.afc.DAO.OWTripDAOImpl;
 import vn.edu.hust.soict.afc.entities.OneWayTrip;
 
-
+/**
+ * 
+ * @author duytruong
+ *
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OWTripDAOTest {
 

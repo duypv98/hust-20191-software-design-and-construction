@@ -13,7 +13,11 @@ import vn.edu.hust.soict.afc.DAO.TFTicketDAOImpl;
 
 import vn.edu.hust.soict.afc.entities.TwentyFourTicket;
 
-
+/**
+ * 
+ * @author duytruong
+ *
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TFTicketDAOTest {
 

@@ -9,7 +9,11 @@ import org.junit.runners.MethodSorters;
 import vn.edu.hust.soict.afc.DAO.PPCardDAOImpl;
 import vn.edu.hust.soict.afc.entities.PrepaidCard;
 
-
+/**
+ * 
+ * @author duytruong
+ *
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PPCardDAOTest {
 

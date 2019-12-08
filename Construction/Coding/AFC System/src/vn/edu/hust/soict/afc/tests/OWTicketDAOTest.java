@@ -9,7 +9,11 @@ import org.junit.runners.MethodSorters;
 import vn.edu.hust.soict.afc.DAO.OWTicketDAOImpl;
 import vn.edu.hust.soict.afc.entities.OneWayTicket;
 
-
+/**
+ * 
+ * @author duytruong
+ *
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OWTicketDAOTest {
 
