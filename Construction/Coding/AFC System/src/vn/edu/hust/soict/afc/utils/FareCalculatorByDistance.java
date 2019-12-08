@@ -2,7 +2,7 @@ package vn.edu.hust.soict.afc.utils;
 
 import vn.edu.hust.soict.afc.entities.Station;
 
-public class FareCalculatorByDistance extends AFareCalculator {
+public class FareCalculatorByDistance implements IFareCalculator {
 	/*
 	 * (non-Javadoc)
 	 *
