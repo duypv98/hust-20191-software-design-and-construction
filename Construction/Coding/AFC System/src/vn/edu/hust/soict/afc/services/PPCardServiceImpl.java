@@ -21,18 +21,20 @@ import vn.edu.hust.soict.afc.exception.CardOnlyCheckInException;
 import vn.edu.hust.soict.afc.exception.CardOnlyCheckOutException;
 import vn.edu.hust.soict.afc.exception.FailedTransactionException;
 import vn.edu.hust.soict.afc.exception.NotEnoughBalanceException;
-import vn.edu.hust.soict.afc.utils.Fare;
+import vn.edu.hust.soict.afc.utils.AFareCalculator;
+import vn.edu.hust.soict.afc.utils.NumberRound;
 
 public class PPCardServiceImpl implements PPCardService {
 
 	private PPCardDAO pPCardDAO = new PPCardDAOImpl();
 	private PPTripDAO pPTripDAO = new PPTripDAOImpl();
 	private CardScanner cardScanner = CardScanner.getInstance();
-
+	private AFareCalculator fareCalculator;
 	/**
 	 *
 	 */
-	public PPCardServiceImpl() {
+	public PPCardServiceImpl(AFareCalculator fareCalculator) {
+		this.fareCalculator = fareCalculator;
 	}
 
 	/*
@@ -57,7 +59,7 @@ public class PPCardServiceImpl implements PPCardService {
 			throw new CantFindCardException("INVALID CARD\nCan't find this card");
 		}
 
-		if (prepaidCard.getBalance() < Fare.BASE_FARE) {
+		if (prepaidCard.getBalance() < fareCalculator.BASE_FARE) {
 			String message = "INVALID CARD\nThe balance on the card is less than the base fare" + "\nCardID: "
 					+ prepaidCard.getId() + "\nBalance: " + prepaidCard.getBalance() + " eur";
 			throw new BalanceLessThanBaseFareException(message);
@@ -123,7 +125,7 @@ public class PPCardServiceImpl implements PPCardService {
 
 		PrepaidTrip prepaidTrip = pPTripDAO.findByCardIdAndOnTrip(prepaidCard.getId(), true);
 		Station incomeStation = StationService.getStationInfo(prepaidTrip.getIncomeStationId());
-		double realFare = Fare.caculate(incomeStation, outcomeStation);
+		double realFare = fareCalculator.caculate(incomeStation, outcomeStation);
 
 		if (realFare > prepaidCard.getBalance()) {
 			String message = "INVALID CARD\nNot enough balance\nYour Balance: " + prepaidCard.getBalance() + " eur "
@@ -131,7 +133,7 @@ public class PPCardServiceImpl implements PPCardService {
 			throw new NotEnoughBalanceException(message);
 		}
 
-		double newBalance = Fare.roundedOneDigitAfterAComma(prepaidCard.getBalance() - realFare);
+		double newBalance = NumberRound.roundOneDigitAfterAComma(prepaidCard.getBalance() - realFare);
 
 		prepaidCard.setBalance(newBalance);
 		prepaidCard.setCheckedIn(false);
