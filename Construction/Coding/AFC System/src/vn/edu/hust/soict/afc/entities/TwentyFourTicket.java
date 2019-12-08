@@ -17,6 +17,13 @@ public class TwentyFourTicket {
 		
 	}
 	
+	public TwentyFourTicket(String id, String ticketCode, Timestamp validTime, boolean checkedIn) {
+		this.id = id;
+		this.ticketCode = ticketCode;
+		this.validTime = validTime;
+		this.checkedIn = checkedIn;
+	}
+
 	public String getId() {
 		return id;
 	}

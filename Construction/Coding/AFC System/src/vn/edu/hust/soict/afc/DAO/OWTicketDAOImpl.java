@@ -1,5 +1,11 @@
 /**
- * 
+ * @author duypv
+ * @date Nov 14, 2019
+ * @project afc_application
+ * @lecturer Nguyen Thi Thu Trang
+ * @class 111589
+ *
+ * @description The Automated Fare Controller sumulation program
  */
 package vn.edu.hust.soict.afc.DAO;
 
@@ -12,7 +18,9 @@ import vn.edu.hust.soict.afc.entities.OneWayTicket;
 import vn.edu.hust.soict.afc.utils.ConnectionUtils;
 
 /**
- * @author Professor
+ *
+ * @author duypv, duytruong
+ * @implSpec OWTicketDAO
  *
  */
 public class OWTicketDAOImpl implements OWTicketDAO {
@@ -20,12 +28,12 @@ public class OWTicketDAOImpl implements OWTicketDAO {
 	/**
 	 * 
 	 * @param id
-	 * @return
+	 * @return OneWayTicket
 	 */
 	@Override
 	public OneWayTicket findById(String id) {
 		OneWayTicket owt = null;
-		String sql = "SELECT embarkation_id, disembarkation_id, checked_in, fare, activated FROM oneway_ticket WHERE id = ?";
+		String sql = "SELECT id, ticket_code, embarkation_id, disembarkation_id, checked_in, fare, activated FROM oneway_ticket WHERE id = ?";
 		try {
 			Connection conn = ConnectionUtils.getMyConnection();
 			PreparedStatement ps = conn.prepareStatement(sql);
@@ -44,15 +52,17 @@ public class OWTicketDAOImpl implements OWTicketDAO {
 	}
 
 	/**
+	 * Mapping method
 	 * @param id
 	 * @param rs
-	 * @return
+	 * @return OneWayTicket
 	 * @throws SQLException
 	 */
 	private OneWayTicket mapToOneWayTicket(ResultSet rs) throws SQLException {
 		OneWayTicket owt;
 		owt = new OneWayTicket();
 		owt.setId(rs.getString("id"));
+		owt.setTicketCode(rs.getString("ticket_code"));;
 		owt.setEmbarkationId(rs.getInt("embarkation_id"));
 		owt.setDisembarkationId(rs.getInt("disembarkation_id"));
 		owt.setCheckedIn(rs.getBoolean("checked_in"));
@@ -103,7 +113,7 @@ public class OWTicketDAOImpl implements OWTicketDAO {
 	/**
 	 * 
 	 * @param ticketCode
-	 * @return
+	 * @return {OneWayTicket}
 	 */
 	@Override
 	public OneWayTicket findByTicketCode(String ticketCode) {

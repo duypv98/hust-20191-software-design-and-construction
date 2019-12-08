@@ -10,6 +10,8 @@ import vn.edu.hust.soict.afc.DAO.PPCardDAO;
 import vn.edu.hust.soict.afc.DAO.PPCardDAOImpl;
 import vn.edu.hust.soict.afc.DAO.PPTripDAO;
 import vn.edu.hust.soict.afc.DAO.PPTripDAOImpl;
+import vn.edu.hust.soict.afc.DAO.StationDAO;
+import vn.edu.hust.soict.afc.DAO.StationDAOImpl;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.entities.PrepaidCard;
 import vn.edu.hust.soict.afc.entities.PrepaidTrip;
@@ -21,27 +23,31 @@ import vn.edu.hust.soict.afc.exception.CardOnlyCheckInException;
 import vn.edu.hust.soict.afc.exception.CardOnlyCheckOutException;
 import vn.edu.hust.soict.afc.exception.FailedTransactionException;
 import vn.edu.hust.soict.afc.exception.NotEnoughBalanceException;
-import vn.edu.hust.soict.afc.utils.Fare;
+import vn.edu.hust.soict.afc.utils.IFareCalculator;
+import vn.edu.hust.soict.afc.utils.NumberRound;
 
-public class PPCardServiceImpl implements PPCardService {
+/**
+ * prepaid card's service implement
+ * @author duycv
+ * @date Dec 6, 2019
+ * @project AFC System
+ * @lecturer Nguyen Thi Thu Trang
+ * @class 111589
+ */
+public class PPCardServiceImpl implements IItemService {
 
 	private PPCardDAO pPCardDAO = new PPCardDAOImpl();
 	private PPTripDAO pPTripDAO = new PPTripDAOImpl();
 	private CardScanner cardScanner = CardScanner.getInstance();
-
+	private IFareCalculator fareCalculator;
+	private StationDAO stationDAO = new StationDAOImpl();
 	/**
 	 *
 	 */
-	public PPCardServiceImpl() {
+	public PPCardServiceImpl(IFareCalculator fareCalculator) {
+		this.fareCalculator = fareCalculator;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * vn.edu.hust.soict.afc.services.PPCardService#checkIn(vn.edu.hust.soict.afc.
-	 * entities.Station, vn.edu.hust.soict.afc.entities.PrepaidCard)
-	 */
 	@Override
 	public DataResponse checkIn(String barCode, Station incomeStation) {
 		String cardCode;
@@ -57,7 +63,7 @@ public class PPCardServiceImpl implements PPCardService {
 			throw new CantFindCardException("INVALID CARD\nCan't find this card");
 		}
 
-		if (prepaidCard.getBalance() < Fare.BASE_FARE) {
+		if (prepaidCard.getBalance() < IFareCalculator.BASE_FARE) {
 			String message = "INVALID CARD\nThe balance on the card is less than the base fare" + "\nCardID: "
 					+ prepaidCard.getId() + "\nBalance: " + prepaidCard.getBalance() + " eur";
 			throw new BalanceLessThanBaseFareException(message);
@@ -95,13 +101,6 @@ public class PPCardServiceImpl implements PPCardService {
 		return pPCardDAO.update(prepaidCard) && pPTripDAO.save(prepaidTrip);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * vn.edu.hust.soict.afc.services.PPCardService#checkOut(vn.edu.hust.soict.afc.
-	 * entities.Station, vn.edu.hust.soict.afc.entities.PrepaidCard)
-	 */
 	@Override
 	public DataResponse checkOut(String barCode, Station outcomeStation) {
 		String cardCode;
@@ -122,8 +121,8 @@ public class PPCardServiceImpl implements PPCardService {
 		}
 
 		PrepaidTrip prepaidTrip = pPTripDAO.findByCardIdAndOnTrip(prepaidCard.getId(), true);
-		Station incomeStation = StationService.getStationInfo(prepaidTrip.getIncomeStationId());
-		double realFare = Fare.caculate(incomeStation, outcomeStation);
+		Station incomeStation = stationDAO.findById(prepaidTrip.getIncomeStationId());
+		double realFare = fareCalculator.caculate(incomeStation, outcomeStation);
 
 		if (realFare > prepaidCard.getBalance()) {
 			String message = "INVALID CARD\nNot enough balance\nYour Balance: " + prepaidCard.getBalance() + " eur "
@@ -131,7 +130,7 @@ public class PPCardServiceImpl implements PPCardService {
 			throw new NotEnoughBalanceException(message);
 		}
 
-		double newBalance = Fare.roundedOneDigitAfterAComma(prepaidCard.getBalance() - realFare);
+		double newBalance = NumberRound.roundOneDigitAfterAComma(prepaidCard.getBalance() - realFare);
 
 		prepaidCard.setBalance(newBalance);
 		prepaidCard.setCheckedIn(false);
@@ -155,6 +154,12 @@ public class PPCardServiceImpl implements PPCardService {
 		}
 	}
 
+	/**
+	 * save checkout's transaction
+	 * @param prepaidCard prepaid card
+	 * @param prepaidTrip prepaid card's trip
+	 * @return success or failed
+	 */
 	private boolean saveTransactionForCheckOut(PrepaidCard prepaidCard, PrepaidTrip prepaidTrip) {
 		return pPCardDAO.update(prepaidCard) && pPTripDAO.update(prepaidTrip);
 	}

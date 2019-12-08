@@ -52,7 +52,7 @@ public class TFTripDAOImpl implements TFTripDAO {
 	 */
 	@Override
 	public boolean save(TwentyFourTrip twentyFourTrip) {
-		String sql = "INSERT INTO twentyfour_trip (ticket_id, income_station_id, income_time, outcome_station_id, outcome_time, ontrip)"
+		String sql = "INSERT INTO tf_trip (ticket_id, income_station_id, income_time, outcome_station_id, outcome_time, ontrip)"
 				+ "VALUES(?, ?, ?, ?, ?, ?)";
 
 		try {
@@ -107,7 +107,7 @@ public class TFTripDAOImpl implements TFTripDAO {
 	@Override
 	public boolean update(TwentyFourTrip twentyFourTrip) {
 		
-		String sql = "UPDATE twentyfour_trip SET ticket_id = ?, income_station_id = ?, income_time = ?, outcome_station_id = ?, outcome_time = ?, ontrip = ?"
+		String sql = "UPDATE tf_trip SET ticket_id = ?, income_station_id = ?, income_time = ?, outcome_station_id = ?, outcome_time = ?, ontrip = ?"
 				+ " WHERE id=?";
 
 		try {

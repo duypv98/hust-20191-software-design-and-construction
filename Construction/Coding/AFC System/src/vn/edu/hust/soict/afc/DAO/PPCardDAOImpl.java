@@ -1,3 +1,13 @@
+/**
+ *
+ * @author duycv
+ * @date Dec 6, 2019
+ * @project AFC System
+ * @lecturer Nguyen Thi Thu Trang
+ * @class 111589
+ *
+ * @description prepaid card DAO implement
+ */
 package vn.edu.hust.soict.afc.DAO;
 
 import java.sql.Connection;
@@ -8,12 +18,13 @@ import java.sql.SQLException;
 import vn.edu.hust.soict.afc.entities.PrepaidCard;
 import vn.edu.hust.soict.afc.utils.ConnectionUtils;
 
+/**
+ * 
+ * @author duycv
+ *
+ */
 public class PPCardDAOImpl implements PPCardDAO {
-    /*
-     * (non-Javadoc)
-     *
-     * @see vn.edu.hust.soict.afc.DAO.PPCardDAO#findById(java.lang.String)
-     */
+
     @Override
     public PrepaidCard findById(String id) {
         String sql = "SELECT id, card_code, balance, checked_in FROM prepaid_card WHERE id = ?";
@@ -43,13 +54,6 @@ public class PPCardDAOImpl implements PPCardDAO {
         return prepaidCard;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * vn.edu.hust.soict.afc.DAO.PPCardDAO#update(vn.edu.hust.soict.afc.entities.
-     * PrepaidCard)
-     */
     @Override
     public boolean update(PrepaidCard prepaidCard) {
         String sql = "UPDATE prepaid_card SET card_code = ?, balance = ?, checked_in = ? WHERE id = ?";

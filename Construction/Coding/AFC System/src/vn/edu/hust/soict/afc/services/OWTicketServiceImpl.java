@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package vn.edu.hust.soict.afc.services;
 
@@ -13,6 +13,8 @@ import vn.edu.hust.soict.afc.DAO.OWTicketDAO;
 import vn.edu.hust.soict.afc.DAO.OWTicketDAOImpl;
 import vn.edu.hust.soict.afc.DAO.OWTripDAO;
 import vn.edu.hust.soict.afc.DAO.OWTripDAOImpl;
+import vn.edu.hust.soict.afc.DAO.StationDAO;
+import vn.edu.hust.soict.afc.DAO.StationDAOImpl;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.entities.OneWayTicket;
 import vn.edu.hust.soict.afc.entities.OneWayTrip;
@@ -25,27 +27,30 @@ import vn.edu.hust.soict.afc.exception.NoLongerValidTicketException;
 import vn.edu.hust.soict.afc.exception.TicketOnlyCheckInException;
 import vn.edu.hust.soict.afc.exception.TicketOnlyCheckOutException;
 import vn.edu.hust.soict.afc.exception.WrongStationException;
+import vn.edu.hust.soict.afc.utils.IFareCalculator;
 import vn.edu.hust.soict.afc.utils.Distance;
-import vn.edu.hust.soict.afc.utils.Fare;
 
 /**
  * @author Professor
  *
  */
-public class OWTicketServiceImpl implements OWTicketService {
+public class OWTicketServiceImpl implements IItemService {
 
 	private OWTicketDAO oWTicketDAO = new OWTicketDAOImpl();
 	private OWTripDAO oWTripDAO = new OWTripDAOImpl();
 	private TicketRecognizer ticketRecognizer = TicketRecognizer.getInstance();
+	private IFareCalculator fareCalculator;
+	private StationDAO stationDAO = new StationDAOImpl();
 
 	/**
-	 * 
+	 *
 	 */
-	public OWTicketServiceImpl() {
+	public OWTicketServiceImpl(IFareCalculator fareCalculator) {
+		this.fareCalculator = fareCalculator;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param barCode
 	 * @param station
 	 * @return
@@ -73,20 +78,20 @@ public class OWTicketServiceImpl implements OWTicketService {
 			throw new TicketOnlyCheckOutException("INVALID TICKET\nThis ticket just only for checkout");
 		}
 
-		Station embarkation = StationService.getStationInfo(oneWayTicket.getEmbarkationId());
-		Station disembarkation = StationService.getStationInfo(oneWayTicket.getDisembarkationId());
+		Station embarkation = stationDAO.findById(oneWayTicket.getEmbarkationId());
+		Station disembarkation = stationDAO.findById(oneWayTicket.getDisembarkationId());
 
 		if (!Distance.isCorrectPosition(embarkation, disembarkation, station)) {
 			throw new WrongStationException("INVALID TICKET\nWrong station to go");
 		}
-		
+
 		Timestamp timestamp = new Timestamp(new Date().getTime());
 		OneWayTrip oneWayTrip = new OneWayTrip();
 		oneWayTrip.setTicketId(oneWayTicket.getId());
 		oneWayTrip.setIncomeStationId(station.getId());
 		oneWayTrip.setIncomeTime(timestamp);
 		oneWayTrip.setOnTrip(true);
-		
+
 		oneWayTicket.setCheckedIn(true);
 		oneWayTicket.setActivated(false);
 
@@ -94,19 +99,19 @@ public class OWTicketServiceImpl implements OWTicketService {
 			DataResponse res = new DataResponse();
 			String message = "OPENING TICKET..." + "\nTicketID: " + oneWayTicket.getId() + "\nDistance: " + Distance.calculate(embarkation, disembarkation)
 					+ " km" + "\nFare: " + oneWayTicket.getFare() + " eur";
-			
+
 			res.setMessage(message);
 			res.setDisplayColor(Color.GREEN);
 			res.setGateOpen(true);
-			
+
 			return res;
 		} else {
 			throw new FailedTransactionException("Save Transaction Failed");
 		}
-		
+
 	}
 	/**
-	 * 
+	 *
 	 * @param oneWayTicket
 	 * @param oneWayTrip
 	 * @return
@@ -114,9 +119,9 @@ public class OWTicketServiceImpl implements OWTicketService {
 	private boolean saveTransactionForCheckIn(OneWayTicket oneWayTicket, OneWayTrip oneWayTrip) {
 		return oWTicketDAO.update(oneWayTicket) && oWTripDAO.save(oneWayTrip);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param barCode
 	 * @param station
 	 * @return
@@ -130,7 +135,7 @@ public class OWTicketServiceImpl implements OWTicketService {
 			throw new CantReadBarCodeException("INVALID CARD\nCan't read barcode");
 		}
 		OneWayTicket oneWayTicket = oWTicketDAO.findByTicketCode(ticketCode);
-		
+
 		if (oneWayTicket == null) {
 			throw new CantFindTicketException("INVALID TICKET\nCan't find this ticket");
 		}
@@ -138,45 +143,45 @@ public class OWTicketServiceImpl implements OWTicketService {
 		if (oneWayTicket.isActivated()) {
 			throw new NoLongerValidTicketException("INVALID TICKET\nThis ticket is no longer valid");
 		}
-		
+
 		if (!oneWayTicket.isCheckedIn()) {
 			throw new TicketOnlyCheckInException("INVALID TICKET\nThis ticket just only for checkin");
 		}
-		
+
 		Timestamp timestamp = new Timestamp(new Date().getTime());
 		OneWayTrip oneWayTrip = oWTripDAO.findByTicketId(oneWayTicket.getId());
-		
-		Station incomeStation = StationService.getStationInfo(oneWayTrip.getIncomeStationId());
-		double realFare = Fare.caculate(incomeStation, station);
+
+		Station incomeStation = stationDAO.findById(oneWayTrip.getIncomeStationId());
+		double realFare = fareCalculator.caculate(incomeStation, station);
 		double realDistance = Distance.calculate(incomeStation, station);
-		
+
 		if (realFare > oneWayTicket.getFare()) {
 			throw new ExpectedFareException("INVALID TICKET\n(Warnings) Expected Fare: " + realFare + " eur, your ticket's fare: " + oneWayTicket.getFare() + " eur");
 		}
-		
+
 		oneWayTicket.setActivated(true);
 		oneWayTicket.setCheckedIn(false);
 		oneWayTrip.setOnTrip(false);
 		oneWayTrip.setOutcomeStationId(station.getId());
 		oneWayTrip.setOutcomeTime(timestamp);
-		
+
 		if (saveTransactionForCheckOut(oneWayTicket, oneWayTrip)) {
 			DataResponse res = new DataResponse();
 			String message = "OPENING TICKET..." + "\nTicketID: " + oneWayTicket.getId() + "\nDistance: " + realDistance
 					+ " km" + "\nFare: " + oneWayTicket.getFare() + " eur";
-			
+
 			res.setMessage(message);
 			res.setDisplayColor(Color.GREEN);
 			res.setGateOpen(true);
-			
+
 			return res;
 		} else {
 			throw new FailedTransactionException("Save Transaction Failed");
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param oneWayTicket
 	 * @param oneWayTrip
 	 * @return

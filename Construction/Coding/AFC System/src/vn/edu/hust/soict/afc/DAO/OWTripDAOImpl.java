@@ -1,3 +1,12 @@
+/**
+ * @author duytruong
+ * @date Nov 14, 2019
+ * @project afc_application
+ * @lecturer Nguyen Thi Thu Trang
+ * @class 111589
+ *
+ * @description The Automated Fare Controller sumulation program
+ */
 package vn.edu.hust.soict.afc.DAO;
 
 import java.sql.Connection;
@@ -8,12 +17,18 @@ import java.sql.SQLException;
 import vn.edu.hust.soict.afc.entities.OneWayTrip;
 import vn.edu.hust.soict.afc.utils.ConnectionUtils;
 
+/**
+ * 
+ * @author duytruong
+ * @implSpec OWTripDAO
+ *
+ */
 public class OWTripDAOImpl implements OWTripDAO {
 
 	/**
 	 * 
 	 * @param ticketId
-	 * @return oneway trip from ticketId
+	 * @return {OneWayTrip}
 	 */
 	@Override
 	public OneWayTrip findByTicketId(String ticketId) {
@@ -82,9 +97,9 @@ public class OWTripDAOImpl implements OWTripDAO {
 			}
 			
 			if (oneWayTrip.getRealFare() == 0.0) {
-				ps.setNull(6, java.sql.Types.TIMESTAMP);
+				ps.setNull(6, java.sql.Types.DOUBLE);
 			} else {
-				ps.setTimestamp(6, oneWayTrip.getOutcomeTime());
+				ps.setDouble(6, oneWayTrip.getRealFare());
 			}
 			
 			ps.setBoolean(7, oneWayTrip.isOnTrip());

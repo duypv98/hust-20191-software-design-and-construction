@@ -27,6 +27,19 @@ public class PrepaidTrip {
 
 	}
 
+	public PrepaidTrip(int id, String cardId, int incomeStationId, Timestamp incomeTime, int outcomeStationId,
+			Timestamp outcomeTime, double realFare, boolean onTrip) {
+		super();
+		this.id = id;
+		this.cardId = cardId;
+		this.incomeStationId = incomeStationId;
+		this.incomeTime = incomeTime;
+		this.outcomeStationId = outcomeStationId;
+		this.outcomeTime = outcomeTime;
+		this.realFare = realFare;
+		this.onTrip = onTrip;
+	}
+
 	/**
 	 * @return the id
 	 */

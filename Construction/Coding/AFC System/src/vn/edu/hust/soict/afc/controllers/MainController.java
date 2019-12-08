@@ -1,55 +1,55 @@
 /**
+ * @author duypv
+ * @date Dec 2, 2019
+ * @project afc_application
+ * @lecturer Nguyen Thi Thu Trang
+ * @class 111589
  *
+ * @description The Automated Fare Controller sumulation program
  */
 package vn.edu.hust.soict.afc.controllers;
 
-import hust.soict.se.customexception.InvalidIDException;
-import hust.soict.se.recognizer.TicketRecognizer;
 import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.services.TicketService;
+import vn.edu.hust.soict.afc.utils.FareCalculatorByDistance;
+import vn.edu.hust.soict.afc.utils.IFareCalculator;
 
 /**
- * @author Professor
+ * Main controller of system
+ * @author duypv
  *
  */
 public class MainController {
 
-	public static TicketRecognizer ticketRecognizer;
 	private TicketService ticketService = new TicketService();
-	private OWController owController = new OWController();
-	private TFController tfController = new TFController();
-	private PPController pPController = new PPController();
+	private ItemController itemController;
+	private IFareCalculator fareCalculator = new FareCalculatorByDistance();
 
 	/**
-	 *
+	 * Constructor
 	 */
 	public MainController() {
-		ticketRecognizer = TicketRecognizer.getInstance();
 	}
 
-	public String getTicketCode(String barcode) {
-		String ticketCode = null;
-		try {
-			ticketCode = ticketRecognizer.process(barcode);
-		} catch (InvalidIDException e) {
-
-		}
-		return ticketCode;
-	}
-
+	/**
+	 * 
+	 * @param appState
+	 * @return {DataResponse}
+	 */
 	public DataResponse commandEnter(AppState appState) {
 		String barcode = appState.getItemBarcode();
 		if (appState.isByTicket()) {
 			String ticketType = ticketService.getTicketType(barcode);
 			if (ticketType.equalsIgnoreCase("OW")) {
-				return owController.process(appState);
+				itemController = new OWController(fareCalculator);
 			} else if (ticketType.equalsIgnoreCase("TF")) {
-				return tfController.process(appState);
+				itemController = new TFController();
 			}
 		} else {
-			return pPController.process(appState);
+			itemController = new PPController(fareCalculator);
+
 		}
-		return null;
+		return itemController.process(appState);
 	}
 }

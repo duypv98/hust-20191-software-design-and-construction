@@ -28,7 +28,7 @@ import vn.edu.hust.soict.afc.exception.TicketOnlyCheckOutException;
  * @author Professor
  *
  */
-public class TFTicketServiceImpl implements TFTicketService {
+public class TFTicketServiceImpl implements IItemService {
 
 	private TFTicketDAO tFTicketDAO = new TFTicketDAOImpl();
 	private TFTripDAO tFTripDAO = new TFTripDAOImpl();
@@ -66,7 +66,7 @@ public class TFTicketServiceImpl implements TFTicketService {
 		Timestamp timestamp = new Timestamp(new Date().getTime());
 		long newValueOfDay = timestamp.getTime() + 24 * 60 * 60 * 1000;
 
-		if (!isFirstTime && twentyFourTicket.getValidTime().after(timestamp)) {
+		if (!isFirstTime && twentyFourTicket.getValidTime().before(timestamp)) {
 			throw new NoLongerValidTicketException("INVALID TICKET\nThis ticket is no longer valid");
 		}
 		

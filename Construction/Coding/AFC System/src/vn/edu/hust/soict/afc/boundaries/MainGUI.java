@@ -1,3 +1,12 @@
+/**
+ * @author duypv
+ * @date Oct 23, 2019
+ * @project afc_application
+ * @lecturer Nguyen Thi Thu Trang
+ * @class 111589
+ *
+ * @description The Automated Fare Controller sumulation program
+ */
 package vn.edu.hust.soict.afc.boundaries;
 
 import java.awt.Color;
@@ -27,15 +36,16 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
+import vn.edu.hust.soict.afc.DAO.StationDAO;
+import vn.edu.hust.soict.afc.DAO.StationDAOImpl;
 import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.entities.Station;
 import vn.edu.hust.soict.afc.exception.ExceptionHandler;
-import vn.edu.hust.soict.afc.services.StationService;
 
 public class MainGUI extends JFrame {
 	/**
-	 * Define UI state
+	 * Define UI states
 	 */
 	private AppState appState;
 	private Map<String, Station> listStations;
@@ -55,8 +65,10 @@ public class MainGUI extends JFrame {
 	private ExceptionHandler exceptionHandler = new ExceptionHandler();
 	public static ImageIcon closeGate = new ImageIcon(MainGUI.class.getResource("/closegate.jpg"));
 	public static ImageIcon openGate = new ImageIcon(MainGUI.class.getResource("/opengate.jpg"));
+	private StationDAO stationDAO = new StationDAOImpl();
 
 	/**
+	 * Get lists station for UI
 	 * @return the listStations
 	 */
 	public Map<String, Station> getListStations() {
@@ -64,6 +76,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Set list stations for UI
 	 * @param listStations the listStations to set
 	 */
 	public void setListStations(Map<String, Station> listStations) {
@@ -71,6 +84,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Get list pseudo-barcodes for UI
 	 * @return the listBarcode
 	 */
 	public DefaultListModel<String> getListBarcode() {
@@ -78,6 +92,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Set list pseudo-barcodes for UI
 	 * @param listBarcode the listBarcode to set
 	 */
 	public void setListBarcode(DefaultListModel<String> listBarcode) {
@@ -85,6 +100,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Get list stations' key for passing to application's state
 	 * @return the stationKeys
 	 */
 	public List<String> getStationKeys() {
@@ -92,6 +108,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Set list stations' key
 	 * @param stationKeys the stationKeys to set
 	 */
 	public void setStationKeys(List<String> stationKeys) {
@@ -99,6 +116,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Get application's state
 	 * @return the appState
 	 */
 	public AppState getAppState() {
@@ -106,6 +124,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Get the barcode input field
 	 * @return the barcodeInputField
 	 */
 	public JTextField getBarcodeInputField() {
@@ -113,6 +132,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Get the enter button
 	 * @return the btnEnter
 	 */
 	public JButton getBtnEnter() {
@@ -120,6 +140,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Get info frame, which displays infomation when passengers use the system
 	 * @return the infoFrame
 	 */
 	public JTextPane getInfoFrame() {
@@ -127,19 +148,23 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Get Gate panel for controlling
 	 * @return the gatePanel
 	 */
 	public GateBoundary getGatePanel() {
 		return gatePanel;
 	}
 
+	/**
+	 * Init state of GUI
+	 */
 	public void init() {
 		this.appState = new AppState();
 		this.listStations = new HashMap<String, Station>();
 		this.stationKeys = new ArrayList<String>();
 		this.listBarcode = new DefaultListModel<String>();
 		List<Station> allStations = new ArrayList<>();
-		allStations = StationService.getAllStations();
+		allStations = stationDAO.findAll();
 		for (int i = 0; i < allStations.size(); i++) {
 			listStations.put(allStations.get(i).getStationName(), allStations.get(i));
 			stationKeys.add(allStations.get(i).getStationName());
