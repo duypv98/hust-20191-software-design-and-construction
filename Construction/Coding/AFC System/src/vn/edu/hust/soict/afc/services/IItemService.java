@@ -3,7 +3,7 @@ package vn.edu.hust.soict.afc.services;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.entities.Station;
 
-public interface OWTicketService {
+public interface IItemService {
 
 	/**
 	 * 

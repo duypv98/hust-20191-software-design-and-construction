@@ -6,8 +6,8 @@ package vn.edu.hust.soict.afc.controllers;
 import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.services.TicketService;
-import vn.edu.hust.soict.afc.utils.AFareCalculator;
 import vn.edu.hust.soict.afc.utils.FareCalculatorByDistance;
+import vn.edu.hust.soict.afc.utils.IFareCalculator;
 
 /**
  * @author Professor
@@ -17,7 +17,7 @@ public class MainController {
 
 	private TicketService ticketService = new TicketService();
 	private ItemController itemController;
-	private AFareCalculator fareCalculator = new FareCalculatorByDistance();
+	private IFareCalculator fareCalculator = new FareCalculatorByDistance();
 
 	/**
 	 *
