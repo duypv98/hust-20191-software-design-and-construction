@@ -8,7 +8,7 @@ import hust.soict.se.recognizer.TicketRecognizer;
 import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.services.TicketService;
-import vn.edu.hust.soict.afc.utils.AFareCalculator;
+import vn.edu.hust.soict.afc.utils.IFareCalculator;
 import vn.edu.hust.soict.afc.utils.FareCalculatorByDistance;
 
 /**
@@ -22,7 +22,7 @@ public class MainController {
 	private OWController owController;
 	private TFController tfController;
 	private PPController pPController;
-	private AFareCalculator fareCalculator = new FareCalculatorByDistance();
+	private IFareCalculator fareCalculator = new FareCalculatorByDistance();
 
 	/**
 	 *

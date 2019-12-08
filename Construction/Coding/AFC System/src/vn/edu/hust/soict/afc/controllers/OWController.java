@@ -7,7 +7,7 @@ import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.services.IItemService;
 import vn.edu.hust.soict.afc.services.OWTicketServiceImpl;
-import vn.edu.hust.soict.afc.utils.AFareCalculator;
+import vn.edu.hust.soict.afc.utils.IFareCalculator;
 
 /**
  * @author iProfessor
@@ -16,7 +16,7 @@ import vn.edu.hust.soict.afc.utils.AFareCalculator;
 public class OWController {
 	private IItemService oWTicketService;
 	
-	public OWController(AFareCalculator fareCalculator) {
+	public OWController(IFareCalculator fareCalculator) {
 		oWTicketService = new OWTicketServiceImpl(fareCalculator);
 	}
 	
