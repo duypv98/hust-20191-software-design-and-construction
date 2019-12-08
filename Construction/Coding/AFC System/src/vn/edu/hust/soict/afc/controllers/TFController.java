@@ -1,6 +1,3 @@
-/**
- *
- */
 package vn.edu.hust.soict.afc.controllers;
 
 import vn.edu.hust.soict.afc.common.AppState;

@@ -25,6 +25,11 @@ public class MainController {
 	public MainController() {
 	}
 
+	/**
+	 * 
+	 * @param appState
+	 * @return
+	 */
 	public DataResponse commandEnter(AppState appState) {
 		String barcode = appState.getItemBarcode();
 		if (appState.isByTicket()) {

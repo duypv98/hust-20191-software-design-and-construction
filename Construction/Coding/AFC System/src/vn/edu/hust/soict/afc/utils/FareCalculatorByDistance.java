@@ -2,14 +2,13 @@ package vn.edu.hust.soict.afc.utils;
 
 import vn.edu.hust.soict.afc.entities.Station;
 
+/**
+ * 
+ * @author duytruong
+ *
+ */
 public class FareCalculatorByDistance implements IFareCalculator {
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * vn.edu.hust.soict.afc.services.PPCardService#getFare(vn.edu.hust.soict.afc.
-	 * entities.Station, vn.edu.hust.soict.afc.entities.Station)
-	 */
+	
 	@Override
 	public double caculate(Station incomeStation, Station outcomeStation) {
 		double distance = Math.abs(outcomeStation.getDistance() - incomeStation.getDistance());
