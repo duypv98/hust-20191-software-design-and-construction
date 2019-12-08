@@ -1,12 +1,19 @@
 /**
- * 
+ * @author duypv
+ * @date Oct 23, 2019
+ * @project afc_application
+ * @lecturer Nguyen Thi Thu Trang
+ * @class 111589
+ *
+ * @description The Automated Fare Controller sumulation program
  */
 package vn.edu.hust.soict.afc.common;
 
 import java.awt.Color;
 
 /**
- * @author Professor
+ * Define Response of system when processing data
+ * @author duypv
  *
  */
 public class DataResponse {
@@ -16,7 +23,7 @@ public class DataResponse {
 	private boolean gateOpen;
 
 	/**
-	 * 
+	 * Constructor
 	 */
 	public DataResponse() {
 		this.message = "";
@@ -25,6 +32,7 @@ public class DataResponse {
 	}
 
 	/**
+	 * Get the message to display
 	 * @return the message
 	 */
 	public String getMessage() {
@@ -32,6 +40,7 @@ public class DataResponse {
 	}
 
 	/**
+	 * Set the message
 	 * @param message the message to set
 	 */
 	public void setMessage(String message) {
@@ -39,6 +48,7 @@ public class DataResponse {
 	}
 
 	/**
+	 * Get the display color of text
 	 * @return the displayColor
 	 */
 	public Color getDisplayColor() {
@@ -46,6 +56,7 @@ public class DataResponse {
 	}
 
 	/**
+	 * Set display color
 	 * @param displayColor the displayColor to set
 	 */
 	public void setDisplayColor(Color displayColor) {
@@ -53,6 +64,7 @@ public class DataResponse {
 	}
 
 	/**
+	 * Get the state of gate
 	 * @return the gateOpen
 	 */
 	public boolean isGateOpen() {
@@ -60,6 +72,7 @@ public class DataResponse {
 	}
 
 	/**
+	 * Set the state of gate
 	 * @param gateOpen the gateOpen to set
 	 */
 	public void setGateOpen(boolean gateOpen) {

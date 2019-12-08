@@ -68,6 +68,7 @@ public class MainGUI extends JFrame {
 	private StationDAO stationDAO = new StationDAOImpl();
 
 	/**
+	 * Get lists station for UI
 	 * @return the listStations
 	 */
 	public Map<String, Station> getListStations() {
@@ -75,6 +76,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Set list stations for UI
 	 * @param listStations the listStations to set
 	 */
 	public void setListStations(Map<String, Station> listStations) {
@@ -82,6 +84,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Get list pseudo-barcodes for UI
 	 * @return the listBarcode
 	 */
 	public DefaultListModel<String> getListBarcode() {
@@ -89,6 +92,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Set list pseudo-barcodes for UI
 	 * @param listBarcode the listBarcode to set
 	 */
 	public void setListBarcode(DefaultListModel<String> listBarcode) {
@@ -96,6 +100,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Get list stations' key for passing to application's state
 	 * @return the stationKeys
 	 */
 	public List<String> getStationKeys() {
@@ -103,6 +108,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Set list stations' key
 	 * @param stationKeys the stationKeys to set
 	 */
 	public void setStationKeys(List<String> stationKeys) {
@@ -110,6 +116,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Get application's state
 	 * @return the appState
 	 */
 	public AppState getAppState() {
@@ -117,6 +124,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Get the barcode input field
 	 * @return the barcodeInputField
 	 */
 	public JTextField getBarcodeInputField() {
@@ -124,6 +132,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Get the enter button
 	 * @return the btnEnter
 	 */
 	public JButton getBtnEnter() {
@@ -131,6 +140,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Get info frame, which displays infomation when passengers use the system
 	 * @return the infoFrame
 	 */
 	public JTextPane getInfoFrame() {
@@ -138,6 +148,7 @@ public class MainGUI extends JFrame {
 	}
 
 	/**
+	 * Get Gate panel for controlling
 	 * @return the gatePanel
 	 */
 	public GateBoundary getGatePanel() {

@@ -1,5 +1,11 @@
 /**
- * 
+ * @author duypv
+ * @date Oct 23, 2019
+ * @project afc_application
+ * @lecturer Nguyen Thi Thu Trang
+ * @class 111589
+ *
+ * @description The Automated Fare Controller sumulation program
  */
 package vn.edu.hust.soict.afc.boundaries;
 
@@ -15,7 +21,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- * @author Professor
+ * Panel references for Gate
+ * @author duypv
  *
  */
 public class GateBoundary extends JPanel {
@@ -37,7 +44,7 @@ public class GateBoundary extends JPanel {
 	};
 	
 	/**
-	 * 
+	 * Constructor
 	 */
 	public GateBoundary() {
 		try {
@@ -57,7 +64,7 @@ public class GateBoundary extends JPanel {
 	}
 	
 	/**
-	 * 
+	 * Simulately method for opening Gate
 	 */
 	public void open() {
 		timer.scheduleAtFixedRate(task, 0, 1000);

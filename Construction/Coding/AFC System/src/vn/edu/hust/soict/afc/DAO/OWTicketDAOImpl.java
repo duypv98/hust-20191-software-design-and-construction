@@ -1,5 +1,11 @@
 /**
- * 
+ * @author duypv
+ * @date Nov 14, 2019
+ * @project afc_application
+ * @lecturer Nguyen Thi Thu Trang
+ * @class 111589
+ *
+ * @description The Automated Fare Controller sumulation program
  */
 package vn.edu.hust.soict.afc.DAO;
 
@@ -12,7 +18,9 @@ import vn.edu.hust.soict.afc.entities.OneWayTicket;
 import vn.edu.hust.soict.afc.utils.ConnectionUtils;
 
 /**
- * @author Professor
+ *
+ * @author duypv, duytruong
+ * @implSpec OWTicketDAO
  *
  */
 public class OWTicketDAOImpl implements OWTicketDAO {
@@ -20,7 +28,7 @@ public class OWTicketDAOImpl implements OWTicketDAO {
 	/**
 	 * 
 	 * @param id
-	 * @return
+	 * @return OneWayTicket
 	 */
 	@Override
 	public OneWayTicket findById(String id) {
@@ -44,9 +52,10 @@ public class OWTicketDAOImpl implements OWTicketDAO {
 	}
 
 	/**
+	 * Mapping method
 	 * @param id
 	 * @param rs
-	 * @return
+	 * @return OneWayTicket
 	 * @throws SQLException
 	 */
 	private OneWayTicket mapToOneWayTicket(ResultSet rs) throws SQLException {
@@ -104,7 +113,7 @@ public class OWTicketDAOImpl implements OWTicketDAO {
 	/**
 	 * 
 	 * @param ticketCode
-	 * @return
+	 * @return {OneWayTicket}
 	 */
 	@Override
 	public OneWayTicket findByTicketCode(String ticketCode) {
@@ -123,12 +132,5 @@ public class OWTicketDAOImpl implements OWTicketDAO {
 			e.printStackTrace();
 		}
 		return oneWayTicket;
-	}
-	
-	public static void main(String[] args) {
-//		14ffab8aebbc5204
-		OWTicketDAOImpl owTicketDAOImpl = new OWTicketDAOImpl();
-		OneWayTicket owt = owTicketDAOImpl.findById("OW201910300000");
-		System.out.println(owt.getId());
 	}
 }
