@@ -1,6 +1,3 @@
-/**
- *
- */
 package vn.edu.hust.soict.afc.DAO;
 
 import java.sql.Connection;
@@ -12,18 +9,17 @@ import vn.edu.hust.soict.afc.entities.PrepaidTrip;
 import vn.edu.hust.soict.afc.utils.ConnectionUtils;
 
 /**
- * @author Professor
  *
+ * @author duycv
+ * @date Dec 6, 2019
+ * @project AFC System
+ * @lecturer Nguyen Thi Thu Trang
+ * @class 111589
+ *
+ * @description prepaid card's trip DAO Implement
  */
 public class PPTripDAOImpl implements PPTripDAO {
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * vn.edu.hust.soict.afc.DAO.PPTripDAO#findByCardIdAndOnTrip(java.lang.String,
-	 * boolean)
-	 */
 	@Override
 	public PrepaidTrip findByCardIdAndOnTrip(String cardId, boolean onTrip) {
 		String sql = "SELECT * FROM prepaid_trip WHERE card_id = ? AND ontrip = ?";
@@ -53,12 +49,6 @@ public class PPTripDAOImpl implements PPTripDAO {
 		return prepaidTrip;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see vn.edu.hust.soict.afc.DAO.PPTripDAO#save(vn.edu.hust.soict.afc.entities.
-	 * PrepaidTrip)
-	 */
 	@Override
 	public boolean save(PrepaidTrip prepaidTrip) {
 		String sql = "INSERT INTO prepaid_trip (card_id, income_station_id, income_time, outcome_station_id, outcome_time, real_fare, ontrip) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -109,13 +99,6 @@ public class PPTripDAOImpl implements PPTripDAO {
 		return false;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * vn.edu.hust.soict.afc.DAO.PPTripDAO#update(vn.edu.hust.soict.afc.entities.
-	 * PrepaidTrip)
-	 */
 	@Override
 	public boolean update(PrepaidTrip prepaidTrip) {
 		String sql = "UPDATE prepaid_trip SET card_id = ?, income_station_id = ?, income_time = ?, outcome_station_id = ?, outcome_time = ?, real_fare = ?, ontrip = ?"
