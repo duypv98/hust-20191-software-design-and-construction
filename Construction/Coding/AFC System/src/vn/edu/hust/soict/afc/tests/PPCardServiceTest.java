@@ -13,7 +13,11 @@ import vn.edu.hust.soict.afc.entities.Station;
 import vn.edu.hust.soict.afc.services.PPCardServiceImpl;
 import vn.edu.hust.soict.afc.utils.FareCalculatorByDistance;
 
-
+/**
+ * 
+ * @author duytruong
+ *
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PPCardServiceTest {
 	
