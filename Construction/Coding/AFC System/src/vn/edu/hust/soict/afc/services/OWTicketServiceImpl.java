@@ -34,7 +34,7 @@ import vn.edu.hust.soict.afc.utils.Distance;
  * @author Professor
  *
  */
-public class OWTicketServiceImpl implements OWTicketService {
+public class OWTicketServiceImpl implements IItemService {
 
 	private OWTicketDAO oWTicketDAO = new OWTicketDAOImpl();
 	private OWTripDAO oWTripDAO = new OWTripDAOImpl();

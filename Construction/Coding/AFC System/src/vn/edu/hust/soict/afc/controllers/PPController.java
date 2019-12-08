@@ -2,7 +2,7 @@ package vn.edu.hust.soict.afc.controllers;
 
 import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.common.DataResponse;
-import vn.edu.hust.soict.afc.services.PPCardService;
+import vn.edu.hust.soict.afc.services.IItemService;
 import vn.edu.hust.soict.afc.services.PPCardServiceImpl;
 import vn.edu.hust.soict.afc.utils.AFareCalculator;
 
@@ -15,7 +15,7 @@ import vn.edu.hust.soict.afc.utils.AFareCalculator;
  * @class 111589
  */
 public class PPController {
-	private PPCardService pPCardService;
+	private IItemService pPCardService;
 	
 	public PPController(AFareCalculator fareCalculator) {
 		pPCardService = new PPCardServiceImpl(fareCalculator);

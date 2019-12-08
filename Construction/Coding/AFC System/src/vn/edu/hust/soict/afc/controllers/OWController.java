@@ -5,7 +5,7 @@ package vn.edu.hust.soict.afc.controllers;
 
 import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.common.DataResponse;
-import vn.edu.hust.soict.afc.services.OWTicketService;
+import vn.edu.hust.soict.afc.services.IItemService;
 import vn.edu.hust.soict.afc.services.OWTicketServiceImpl;
 import vn.edu.hust.soict.afc.utils.AFareCalculator;
 
@@ -14,7 +14,7 @@ import vn.edu.hust.soict.afc.utils.AFareCalculator;
  *
  */
 public class OWController {
-	private OWTicketService oWTicketService;
+	private IItemService oWTicketService;
 	
 	public OWController(AFareCalculator fareCalculator) {
 		oWTicketService = new OWTicketServiceImpl(fareCalculator);

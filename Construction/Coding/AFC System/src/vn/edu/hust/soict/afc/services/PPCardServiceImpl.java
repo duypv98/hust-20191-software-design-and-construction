@@ -34,7 +34,7 @@ import vn.edu.hust.soict.afc.utils.NumberRound;
  * @lecturer Nguyen Thi Thu Trang
  * @class 111589
  */
-public class PPCardServiceImpl implements PPCardService {
+public class PPCardServiceImpl implements IItemService {
 
 	private PPCardDAO pPCardDAO = new PPCardDAOImpl();
 	private PPTripDAO pPTripDAO = new PPTripDAOImpl();
