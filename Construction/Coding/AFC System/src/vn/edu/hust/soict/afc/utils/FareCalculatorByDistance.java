@@ -7,7 +7,7 @@ import vn.edu.hust.soict.afc.entities.Station;
  * @author duytruong
  *
  */
-public class FareCalculatorByDistance implements IFareCalculator {
+public class FareCalculatorByDistance implements FareCalculator {
 	
 	@Override
 	public double caculate(Station incomeStation, Station outcomeStation) {

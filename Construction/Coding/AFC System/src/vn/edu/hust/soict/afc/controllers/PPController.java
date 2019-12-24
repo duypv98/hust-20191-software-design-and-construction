@@ -11,20 +11,21 @@ package vn.edu.hust.soict.afc.controllers;
 
 import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.common.DataResponse;
-import vn.edu.hust.soict.afc.services.IItemService;
-import vn.edu.hust.soict.afc.services.PPCardServiceImpl;
-import vn.edu.hust.soict.afc.utils.IFareCalculator;
+import vn.edu.hust.soict.afc.services.ItemService;
 
 /**
  * Prepaid card controller
  * @author duycv
  * 
  */
-public class PPController implements ItemController {
-	private IItemService pPCardService;
-
-	public PPController(IFareCalculator fareCalculator) {
-		pPCardService = new PPCardServiceImpl(fareCalculator);
+public class PPController extends ItemController {
+	/**
+	 * 
+	 * @param service
+	 * @param fareCalculator
+	 */
+	public PPController(ItemService service) {
+		super(service);
 	}
 
 	/**
@@ -35,9 +36,9 @@ public class PPController implements ItemController {
 	@Override
 	public DataResponse process(AppState appState) {
 		if (appState.isActCheckIn()) {
-			return pPCardService.checkIn(appState.getItemBarcode(), appState.getSelectedStation());
+			return service.checkIn(appState.getItemBarcode(), appState.getSelectedStation());
 		} else {
-			return pPCardService.checkOut(appState.getItemBarcode(), appState.getSelectedStation());
+			return service.checkOut(appState.getItemBarcode(), appState.getSelectedStation());
 		}
 	}
 }

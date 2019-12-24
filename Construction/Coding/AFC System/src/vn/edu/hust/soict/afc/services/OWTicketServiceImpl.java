@@ -27,25 +27,25 @@ import vn.edu.hust.soict.afc.exception.NoLongerValidTicketException;
 import vn.edu.hust.soict.afc.exception.TicketOnlyCheckInException;
 import vn.edu.hust.soict.afc.exception.TicketOnlyCheckOutException;
 import vn.edu.hust.soict.afc.exception.WrongStationException;
-import vn.edu.hust.soict.afc.utils.IFareCalculator;
+import vn.edu.hust.soict.afc.utils.FareCalculator;
 import vn.edu.hust.soict.afc.utils.Distance;
 
 /**
  * @author Professor
  *
  */
-public class OWTicketServiceImpl implements IItemService {
+public class OWTicketServiceImpl implements ItemService {
 
 	private OWTicketDAO oWTicketDAO = new OWTicketDAOImpl();
 	private OWTripDAO oWTripDAO = new OWTripDAOImpl();
 	private TicketRecognizer ticketRecognizer = TicketRecognizer.getInstance();
-	private IFareCalculator fareCalculator;
+	private FareCalculator fareCalculator;
 	private StationDAO stationDAO = new StationDAOImpl();
 
 	/**
 	 *
 	 */
-	public OWTicketServiceImpl(IFareCalculator fareCalculator) {
+	public OWTicketServiceImpl(FareCalculator fareCalculator) {
 		this.fareCalculator = fareCalculator;
 	}
 
