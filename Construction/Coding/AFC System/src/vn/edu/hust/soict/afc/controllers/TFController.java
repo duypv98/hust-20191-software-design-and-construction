@@ -11,23 +11,25 @@ package vn.edu.hust.soict.afc.controllers;
 
 import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.common.DataResponse;
-import vn.edu.hust.soict.afc.services.IItemService;
-import vn.edu.hust.soict.afc.services.TFTicketServiceImpl;
+import vn.edu.hust.soict.afc.services.ItemService;
 
 /**
  * Twenty-four-hour ticket controller
  * @author duypv, duycv
  *
  */
-public class TFController implements ItemController {
-	private IItemService tFTicketService = new TFTicketServiceImpl();
+public class TFController extends ItemController {
+	
+	public TFController(ItemService service) {
+		super(service);
+	}
 
 	@Override
 	public DataResponse process(AppState appState) {
 		if (appState.isActCheckIn()) {
-			return tFTicketService.checkIn(appState.getItemBarcode(), appState.getSelectedStation());
+			return service.checkIn(appState.getItemBarcode(), appState.getSelectedStation());
 		} else {
-			return tFTicketService.checkOut(appState.getItemBarcode(), appState.getSelectedStation());
+			return service.checkOut(appState.getItemBarcode(), appState.getSelectedStation());
 		}
 	}
 }

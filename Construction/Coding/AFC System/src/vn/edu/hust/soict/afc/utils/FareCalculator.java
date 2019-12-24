@@ -7,7 +7,7 @@ import vn.edu.hust.soict.afc.entities.Station;
  * @author duytruong
  *
  */
-public interface IFareCalculator {
+public interface FareCalculator {
 	public static final double BASE_DISTANCE = 5.0;
 	public static final double BASE_FARE = 1.9;
 	public static final double ADDED_DISTANCE = 2.0;
