@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package vn.edu.hust.soict.afc.services;
 
@@ -10,9 +10,7 @@ import java.util.Date;
 import hust.soict.se.customexception.InvalidIDException;
 import hust.soict.se.recognizer.TicketRecognizer;
 import vn.edu.hust.soict.afc.DAO.TFTicketDAO;
-import vn.edu.hust.soict.afc.DAO.TFTicketDAOImpl;
 import vn.edu.hust.soict.afc.DAO.TFTripDAO;
-import vn.edu.hust.soict.afc.DAO.TFTripDAOImpl;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.entities.Station;
 import vn.edu.hust.soict.afc.entities.TwentyFourTicket;
@@ -28,20 +26,15 @@ import vn.edu.hust.soict.afc.exception.TicketOnlyCheckOutException;
  * @author Professor
  *
  */
-public class TFTicketServiceImpl implements ItemService {
+public class TFTicketServiceImpl extends ItemService {
 
-	private TFTicketDAO tFTicketDAO = new TFTicketDAOImpl();
-	private TFTripDAO tFTripDAO = new TFTripDAOImpl();
-	private TicketRecognizer ticketRecognizer = TicketRecognizer.getInstance();
 
-	/**
-	 * 
-	 */
-	public TFTicketServiceImpl() {
+	public TFTicketServiceImpl(TFTicketDAO tFTicketDAO, TFTripDAO tFTripDAO, TicketRecognizer ticketRecognizer) {
+		super(tFTicketDAO, tFTripDAO, ticketRecognizer);
 	}
 
 	/**
-	 * 
+	 *
 	 * @param barCode
 	 * @param station
 	 * @return
@@ -69,9 +62,9 @@ public class TFTicketServiceImpl implements ItemService {
 		if (!isFirstTime && twentyFourTicket.getValidTime().before(timestamp)) {
 			throw new NoLongerValidTicketException("INVALID TICKET\nThis ticket is no longer valid");
 		}
-		
+
 		if (twentyFourTicket.isCheckedIn()) {
-			throw new TicketOnlyCheckOutException("INVALID TICKET\nThis ticket just only for checkout"); 
+			throw new TicketOnlyCheckOutException("INVALID TICKET\nThis ticket just only for checkout");
 		}
 
 		TwentyFourTrip twentyFourTrip = new TwentyFourTrip();
@@ -82,30 +75,30 @@ public class TFTicketServiceImpl implements ItemService {
 		twentyFourTrip.setOnTrip(true);
 
 		twentyFourTicket.setCheckedIn(true);
-		
+
 		if (isFirstTime) {
 			Timestamp newValidTime = new Timestamp(newValueOfDay);
 			twentyFourTicket.setValidTime(newValidTime);
 		}
-		
+
 		if (saveTransactionForCheckIn(twentyFourTicket, twentyFourTrip)) {
 			DataResponse res = new DataResponse();
 			String message = "OPENING TICKET...\n"
 					+ "TicketID: " + twentyFourTicket.getId() + "\n"
 					+ "ValidTime:" + twentyFourTicket.getValidTime();
-			
+
 			res.setMessage(message);
 			res.setDisplayColor(Color.GREEN);
 			res.setGateOpen(true);
-			
+
 			return res;
 		} else {
 			throw new FailedTransactionException("Save Transaction Failed");
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param twentyFourTicket
 	 * @param twentyFourTrip
 	 * @return
@@ -113,9 +106,9 @@ public class TFTicketServiceImpl implements ItemService {
 	private boolean saveTransactionForCheckIn(TwentyFourTicket twentyFourTicket, TwentyFourTrip twentyFourTrip) {
 		return tFTicketDAO.update(twentyFourTicket) && tFTripDAO.save(twentyFourTrip);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param barCode
 	 * @param station
 	 * @return
@@ -134,38 +127,38 @@ public class TFTicketServiceImpl implements ItemService {
 		if (twentyFourTicket == null) {
 			throw new CantFindTicketException("INVALID TICKET\nCan't find this ticket");
 		}
-		
+
 		if (!twentyFourTicket.isCheckedIn()) {
 			throw new TicketOnlyCheckInException("INVALID TICKET\nThis ticket just only for checkin");
 		}
-		
+
 		Timestamp timestamp = new Timestamp(new Date().getTime());
 		TwentyFourTrip twentyFourTrip = tFTripDAO.findByTicketIdAndOnTrip(twentyFourTicket.getId(), true);
-		
+
 		twentyFourTrip.setOnTrip(false);
 		twentyFourTrip.setOutcomeStationId(station.getId());
 		twentyFourTrip.setOutcomeTime(timestamp);
-		
+
 		twentyFourTicket.setCheckedIn(false);
-		
+
 		if (saveTransactionForCheckOut(twentyFourTicket, twentyFourTrip)) {
 			DataResponse res = new DataResponse();
 			String message = "OPENING TICKET...\n"
 					+ "TicketID: " + twentyFourTicket.getId() + "\n"
 					+ "ValidTime:" + twentyFourTicket.getValidTime();
-			
+
 			res.setMessage(message);
 			res.setDisplayColor(Color.GREEN);
 			res.setGateOpen(true);
-			
+
 			return res;
 		} else {
 			throw new FailedTransactionException("Save Transaction Failed");
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param twentyFourTicket
 	 * @param twentyFourTrip
 	 * @return
