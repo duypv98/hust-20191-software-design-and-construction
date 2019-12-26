@@ -10,11 +10,8 @@ import java.util.Date;
 import hust.soict.se.customexception.InvalidIDException;
 import hust.soict.se.recognizer.TicketRecognizer;
 import vn.edu.hust.soict.afc.DAO.OWTicketDAO;
-import vn.edu.hust.soict.afc.DAO.OWTicketDAOImpl;
 import vn.edu.hust.soict.afc.DAO.OWTripDAO;
-import vn.edu.hust.soict.afc.DAO.OWTripDAOImpl;
 import vn.edu.hust.soict.afc.DAO.StationDAO;
-import vn.edu.hust.soict.afc.DAO.StationDAOImpl;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.entities.OneWayTicket;
 import vn.edu.hust.soict.afc.entities.OneWayTrip;
@@ -27,28 +24,20 @@ import vn.edu.hust.soict.afc.exception.NoLongerValidTicketException;
 import vn.edu.hust.soict.afc.exception.TicketOnlyCheckInException;
 import vn.edu.hust.soict.afc.exception.TicketOnlyCheckOutException;
 import vn.edu.hust.soict.afc.exception.WrongStationException;
-import vn.edu.hust.soict.afc.utils.FareCalculator;
 import vn.edu.hust.soict.afc.utils.Distance;
+import vn.edu.hust.soict.afc.utils.FareCalculator;
 
 /**
  * @author Professor
  *
  */
-public class OWTicketServiceImpl implements ItemService {
+public class OWTicketServiceImpl extends ItemService {
 
-	private OWTicketDAO oWTicketDAO = new OWTicketDAOImpl();
-	private OWTripDAO oWTripDAO = new OWTripDAOImpl();
-	private TicketRecognizer ticketRecognizer = TicketRecognizer.getInstance();
-	private FareCalculator fareCalculator;
-	private StationDAO stationDAO = new StationDAOImpl();
-
-	/**
-	 *
-	 */
-	public OWTicketServiceImpl(FareCalculator fareCalculator) {
-		this.fareCalculator = fareCalculator;
+	public OWTicketServiceImpl(StationDAO stationDAO, OWTicketDAO oWTicketDAO, OWTripDAO oWTripDAO,
+			FareCalculator fareCalculator, TicketRecognizer ticketRecognizer) {
+		super(stationDAO, oWTicketDAO, oWTripDAO, fareCalculator, ticketRecognizer);
+		// TODO Auto-generated constructor stub
 	}
-
 	/**
 	 *
 	 * @param barCode

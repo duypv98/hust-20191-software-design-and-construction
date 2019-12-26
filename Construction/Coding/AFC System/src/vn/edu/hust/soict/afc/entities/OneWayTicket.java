@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package vn.edu.hust.soict.afc.entities;
 
@@ -7,25 +7,23 @@ package vn.edu.hust.soict.afc.entities;
  * @author Professor
  *
  */
-public class OneWayTicket {
+public class OneWayTicket extends Item {
 
-	private String id;
 	private String ticketCode;
 	private int embarkationId;
 	private int disembarkationId;
 	private double fare;
-	private boolean checkedIn;
 	private boolean activated;
 
 	/**
-	 * 
+	 *
 	 */
 	public OneWayTicket() {
 
 	}
 
 	/**
-	 * 
+	 *
 	 * @param id
 	 * @param ticketCode
 	 * @param embarkationId
@@ -43,24 +41,6 @@ public class OneWayTicket {
 		this.fare = fare;
 		this.checkedIn = checkedIn;
 		this.activated = activated;
-	}	
-
-//	public boolean equalsTo(OneWayTicket oneWayTicket) {
-//		return  
-//			this.id == oneWayTicket.id &&
-//			this.ticketCode == oneWayTicket.ticketCode &&
-//			this.embarkationId == oneWayTicket.embarkationId &&
-//			this.disembarkationId == oneWayTicket.disembarkationId &&
-//			this.fare == oneWayTicket.fare &&
-//			this.checkedIn == oneWayTicket.checkedIn &&
-//			this.activated == oneWayTicket.activated;
-//	}
-
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
 	}
 
 	public boolean isComparedWith(OneWayTicket ticket) {
@@ -71,13 +51,6 @@ public class OneWayTicket {
 			   this.getFare() == ticket.getFare() &&
 			   this.isCheckedIn() == ticket.isCheckedIn() &&
 			   this.isActivated() == ticket.isActivated();
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	/**
@@ -134,20 +107,6 @@ public class OneWayTicket {
 	 */
 	public void setFare(double fare) {
 		this.fare = fare;
-	}
-
-	/**
-	 * @return the checkedIn
-	 */
-	public boolean isCheckedIn() {
-		return checkedIn;
-	}
-
-	/**
-	 * @param checkedIn the checkedIn to set
-	 */
-	public void setCheckedIn(boolean checkedIn) {
-		this.checkedIn = checkedIn;
 	}
 
 	/**
