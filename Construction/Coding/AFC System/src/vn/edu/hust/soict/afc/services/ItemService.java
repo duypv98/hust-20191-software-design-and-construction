@@ -8,7 +8,7 @@ import vn.edu.hust.soict.afc.entities.Station;
  * @author duytruong
  *
  */
-public interface IItemService {
+public interface ItemService {
 
 	/**
 	 * 

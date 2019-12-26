@@ -11,9 +11,12 @@ package vn.edu.hust.soict.afc.controllers;
 
 import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.common.DataResponse;
+import vn.edu.hust.soict.afc.services.OWTicketServiceImpl;
+import vn.edu.hust.soict.afc.services.PPCardServiceImpl;
+import vn.edu.hust.soict.afc.services.TFTicketServiceImpl;
 import vn.edu.hust.soict.afc.services.TicketService;
 import vn.edu.hust.soict.afc.utils.FareCalculatorByDistance;
-import vn.edu.hust.soict.afc.utils.IFareCalculator;
+import vn.edu.hust.soict.afc.utils.FareCalculator;
 
 /**
  * Main controller of system
@@ -24,7 +27,7 @@ public class MainController {
 
 	private TicketService ticketService = new TicketService();
 	private ItemController itemController;
-	private IFareCalculator fareCalculator = new FareCalculatorByDistance();
+	private FareCalculator fareCalculator = new FareCalculatorByDistance();
 
 	/**
 	 * Constructor
@@ -42,12 +45,12 @@ public class MainController {
 		if (appState.isByTicket()) {
 			String ticketType = ticketService.getTicketType(barcode);
 			if (ticketType.equalsIgnoreCase("OW")) {
-				itemController = new OWController(fareCalculator);
+				itemController = new OWController(new OWTicketServiceImpl(fareCalculator));
 			} else if (ticketType.equalsIgnoreCase("TF")) {
-				itemController = new TFController();
+				itemController = new TFController(new TFTicketServiceImpl());
 			}
 		} else {
-			itemController = new PPController(fareCalculator);
+			itemController = new PPController(new PPCardServiceImpl(fareCalculator));
 
 		}
 		return itemController.process(appState);

@@ -28,7 +28,7 @@ import vn.edu.hust.soict.afc.exception.TicketOnlyCheckOutException;
  * @author Professor
  *
  */
-public class TFTicketServiceImpl implements IItemService {
+public class TFTicketServiceImpl implements ItemService {
 
 	private TFTicketDAO tFTicketDAO = new TFTicketDAOImpl();
 	private TFTripDAO tFTripDAO = new TFTripDAOImpl();
