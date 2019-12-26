@@ -1,15 +1,18 @@
+/**
+ * @author duypv
+ * @date Dec 6, 2019
+ * @project afc_application
+ * @lecturer Nguyen Thi Thu Trang
+ * @class 111589
+ *
+ * @description The Automated Fare Controller sumulation program
+ */
 package vn.edu.hust.soict.afc.DAO;
 
 import vn.edu.hust.soict.afc.entities.PrepaidCard;
 /**
- *
+ * Prepaid Card DAO Interface
  * @author duycv
- * @date Dec 6, 2019
- * @project AFC System
- * @lecturer Nguyen Thi Thu Trang
- * @class 111589
- *
- * @description Prepaid Card DAO Interface
  */
 public interface PPCardDAO {
 

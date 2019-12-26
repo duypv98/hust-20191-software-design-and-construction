@@ -12,7 +12,11 @@ import org.junit.runners.MethodSorters;
 import vn.edu.hust.soict.afc.DAO.PPTripDAOImpl;
 import vn.edu.hust.soict.afc.entities.PrepaidTrip;
 
-
+/**
+ * 
+ * @author duytruong
+ *
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PPTripDAOTest {
 

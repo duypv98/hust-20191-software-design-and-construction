@@ -1,12 +1,19 @@
 /**
- * 
+ * @author duypv
+ * @date Oct 23, 2019
+ * @project afc_application
+ * @lecturer Nguyen Thi Thu Trang
+ * @class 111589
+ *
+ * @description The Automated Fare Controller sumulation program
  */
 package vn.edu.hust.soict.afc.common;
 
 import vn.edu.hust.soict.afc.entities.Station;
 
 /**
- * @author Professor
+ * Define Application's state
+ * @author duypv
  *
  */
 public class AppState {
@@ -17,7 +24,7 @@ public class AppState {
 	private String itemBarcode;
 
 	/**
-	 * 
+	 * Constructor
 	 */
 	public AppState() {
 		this.selectedStation = new Station();
@@ -27,6 +34,7 @@ public class AppState {
 	}
 
 	/**
+	 * Get selected station
 	 * @return the selectedStation
 	 */
 	public Station getSelectedStation() {
@@ -34,6 +42,7 @@ public class AppState {
 	}
 
 	/**
+	 * Set selected station
 	 * @param selectedStation the selectedStation to set
 	 */
 	public void setSelectedStation(Station selectedStation) {
@@ -41,6 +50,7 @@ public class AppState {
 	}
 
 	/**
+	 * Get action: CheckIn or not
 	 * @return the actCheckIn
 	 */
 	public boolean isActCheckIn() {
@@ -48,6 +58,7 @@ public class AppState {
 	}
 
 	/**
+	 * Set action
 	 * @param actCheckIn the actCheckIn to set
 	 */
 	public void setActCheckIn(boolean actCheckIn) {
@@ -55,6 +66,7 @@ public class AppState {
 	}
 
 	/**
+	 * Get item: Ticket or Card
 	 * @return the byTicket
 	 */
 	public boolean isByTicket() {
@@ -62,6 +74,7 @@ public class AppState {
 	}
 
 	/**
+	 * Set item
 	 * @param byTicket the byTicket to set
 	 */
 	public void setByTicket(boolean byTicket) {
@@ -69,6 +82,7 @@ public class AppState {
 	}
 
 	/**
+	 * Get pseudoBarcode
 	 * @return the itemBarcode
 	 */
 	public String getItemBarcode() {
@@ -76,6 +90,7 @@ public class AppState {
 	}
 
 	/**
+	 * Set pseudoBarcode
 	 * @param itemBarcode the itemBarcode to set
 	 */
 	public void setItemBarcode(String itemBarcode) {

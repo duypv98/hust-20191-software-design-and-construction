@@ -12,7 +12,11 @@ import org.junit.runners.MethodSorters;
 import vn.edu.hust.soict.afc.DAO.TFTripDAOImpl;
 import vn.edu.hust.soict.afc.entities.TwentyFourTrip;
 
-
+/**
+ * 
+ * @author duytruong
+ *
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TFTripDAOTest {
 

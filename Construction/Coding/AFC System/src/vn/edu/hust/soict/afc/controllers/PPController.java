@@ -1,3 +1,12 @@
+/**
+ * @author duycv
+ * @date Dec 6, 2019
+ * @project afc_application
+ * @lecturer Nguyen Thi Thu Trang
+ * @class 111589
+ *
+ * @description The Automated Fare Controller sumulation program
+ */
 package vn.edu.hust.soict.afc.controllers;
 
 import vn.edu.hust.soict.afc.common.AppState;
@@ -7,12 +16,9 @@ import vn.edu.hust.soict.afc.services.PPCardServiceImpl;
 import vn.edu.hust.soict.afc.utils.IFareCalculator;
 
 /**
- * prepaid card's controller
+ * Prepaid card controller
  * @author duycv
- * @date Dec 6, 2019
- * @project AFC System
- * @lecturer Nguyen Thi Thu Trang
- * @class 111589
+ * 
  */
 public class PPController implements ItemController {
 	private IItemService pPCardService;
@@ -24,7 +30,7 @@ public class PPController implements ItemController {
 	/**
 	 * navigation prepaid card's business process
 	 * @param appState
-	 * @return
+	 * @return {DataResponse}
 	 */
 	@Override
 	public DataResponse process(AppState appState) {
