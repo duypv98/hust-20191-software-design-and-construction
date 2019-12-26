@@ -7,11 +7,8 @@ import java.util.Date;
 import hust.soict.se.customexception.InvalidIDException;
 import hust.soict.se.scanner.CardScanner;
 import vn.edu.hust.soict.afc.DAO.PPCardDAO;
-import vn.edu.hust.soict.afc.DAO.PPCardDAOImpl;
 import vn.edu.hust.soict.afc.DAO.PPTripDAO;
-import vn.edu.hust.soict.afc.DAO.PPTripDAOImpl;
 import vn.edu.hust.soict.afc.DAO.StationDAO;
-import vn.edu.hust.soict.afc.DAO.StationDAOImpl;
 import vn.edu.hust.soict.afc.common.DataResponse;
 import vn.edu.hust.soict.afc.entities.PrepaidCard;
 import vn.edu.hust.soict.afc.entities.PrepaidTrip;
@@ -23,7 +20,7 @@ import vn.edu.hust.soict.afc.exception.CardOnlyCheckInException;
 import vn.edu.hust.soict.afc.exception.CardOnlyCheckOutException;
 import vn.edu.hust.soict.afc.exception.FailedTransactionException;
 import vn.edu.hust.soict.afc.exception.NotEnoughBalanceException;
-import vn.edu.hust.soict.afc.utils.IFareCalculator;
+import vn.edu.hust.soict.afc.utils.FareCalculator;
 import vn.edu.hust.soict.afc.utils.NumberRound;
 
 /**
@@ -34,18 +31,11 @@ import vn.edu.hust.soict.afc.utils.NumberRound;
  * @lecturer Nguyen Thi Thu Trang
  * @class 111589
  */
-public class PPCardServiceImpl implements IItemService {
+public class PPCardServiceImpl extends ItemService {
 
-	private PPCardDAO pPCardDAO = new PPCardDAOImpl();
-	private PPTripDAO pPTripDAO = new PPTripDAOImpl();
-	private CardScanner cardScanner = CardScanner.getInstance();
-	private IFareCalculator fareCalculator;
-	private StationDAO stationDAO = new StationDAOImpl();
-	/**
-	 *
-	 */
-	public PPCardServiceImpl(IFareCalculator fareCalculator) {
-		this.fareCalculator = fareCalculator;
+	public PPCardServiceImpl(StationDAO stationDAO, PPCardDAO pPCardDAO, PPTripDAO pPTripDAO,
+			FareCalculator fareCalculator, CardScanner cardScanner) {
+		super(stationDAO, pPCardDAO, pPTripDAO, fareCalculator, cardScanner);
 	}
 
 	@Override
@@ -63,7 +53,7 @@ public class PPCardServiceImpl implements IItemService {
 			throw new CantFindCardException("INVALID CARD\nCan't find this card");
 		}
 
-		if (prepaidCard.getBalance() < IFareCalculator.BASE_FARE) {
+		if (prepaidCard.getBalance() < FareCalculator.BASE_FARE) {
 			String message = "INVALID CARD\nThe balance on the card is less than the base fare" + "\nCardID: "
 					+ prepaidCard.getId() + "\nBalance: " + prepaidCard.getBalance() + " eur";
 			throw new BalanceLessThanBaseFareException(message);
