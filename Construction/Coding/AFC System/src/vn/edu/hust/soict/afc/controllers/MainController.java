@@ -27,9 +27,9 @@ import vn.edu.hust.soict.afc.DAO.TFTripDAO;
 import vn.edu.hust.soict.afc.DAO.TFTripDAOImpl;
 import vn.edu.hust.soict.afc.common.AppState;
 import vn.edu.hust.soict.afc.common.DataResponse;
-import vn.edu.hust.soict.afc.services.OWTicketServiceImpl;
-import vn.edu.hust.soict.afc.services.PPCardServiceImpl;
-import vn.edu.hust.soict.afc.services.TFTicketServiceImpl;
+import vn.edu.hust.soict.afc.services.OWTicketService;
+import vn.edu.hust.soict.afc.services.PPCardService;
+import vn.edu.hust.soict.afc.services.TFTicketService;
 import vn.edu.hust.soict.afc.services.TicketService;
 import vn.edu.hust.soict.afc.utils.FareCalculator;
 import vn.edu.hust.soict.afc.utils.FareCalculatorByDistance;
@@ -73,12 +73,12 @@ public class MainController {
 		if (appState.isByTicket()) {
 			String ticketType = ticketService.getTicketType(barcode);
 			if (ticketType.equalsIgnoreCase("OW")) {
-				itemController = new OWController(new OWTicketServiceImpl(stationDAO, oWTicketDAO, oWTripDAO, fareCalculator, ticketRecognizer));
+				itemController = new OWController(new OWTicketService(stationDAO, oWTicketDAO, oWTripDAO, fareCalculator, ticketRecognizer));
 			} else if (ticketType.equalsIgnoreCase("TF")) {
-				itemController = new TFController(new TFTicketServiceImpl(tFTicketDAO, tFTripDAO, ticketRecognizer));
+				itemController = new TFController(new TFTicketService(tFTicketDAO, tFTripDAO, ticketRecognizer));
 			}
 		} else {
-			itemController = new PPController(new PPCardServiceImpl(stationDAO, pPCardDAO, pPTripDAO, fareCalculator, cardScanner));
+			itemController = new PPController(new PPCardService(stationDAO, pPCardDAO, pPTripDAO, fareCalculator, cardScanner));
 
 		}
 		return itemController.process(appState);

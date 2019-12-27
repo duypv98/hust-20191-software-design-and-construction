@@ -13,6 +13,13 @@ import java.sql.SQLException;
  * @class 111589
  */
 public class ConnectionUtils {
+	
+	private static Connection connection;
+	
+	private ConnectionUtils() {
+		
+	}
+	
 	/**
 	 * get my connection
 	 * @return connection
@@ -20,6 +27,9 @@ public class ConnectionUtils {
 	 * @throws ClassNotFoundException
 	 */
 	public static Connection getMyConnection() throws SQLException, ClassNotFoundException {
-		return MySQLConnUtils.getMySQLConnection();
+		if (connection == null) {
+			connection = MySQLConnUtils.getMySQLConnection();
+		}
+		return connection;
 	}
 }

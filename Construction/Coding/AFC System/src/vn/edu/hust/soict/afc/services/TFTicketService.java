@@ -26,10 +26,10 @@ import vn.edu.hust.soict.afc.exception.TicketOnlyCheckOutException;
  * @author Professor
  *
  */
-public class TFTicketServiceImpl extends ItemService {
+public class TFTicketService extends ItemService {
 
 
-	public TFTicketServiceImpl(TFTicketDAO tFTicketDAO, TFTripDAO tFTripDAO, TicketRecognizer ticketRecognizer) {
+	public TFTicketService(TFTicketDAO tFTicketDAO, TFTripDAO tFTripDAO, TicketRecognizer ticketRecognizer) {
 		super(tFTicketDAO, tFTripDAO, ticketRecognizer);
 	}
 
