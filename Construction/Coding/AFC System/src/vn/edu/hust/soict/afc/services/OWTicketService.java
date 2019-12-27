@@ -31,9 +31,9 @@ import vn.edu.hust.soict.afc.utils.FareCalculator;
  * @author Professor
  *
  */
-public class OWTicketServiceImpl extends ItemService {
+public class OWTicketService extends ItemService {
 
-	public OWTicketServiceImpl(StationDAO stationDAO, OWTicketDAO oWTicketDAO, OWTripDAO oWTripDAO,
+	public OWTicketService(StationDAO stationDAO, OWTicketDAO oWTicketDAO, OWTripDAO oWTripDAO,
 			FareCalculator fareCalculator, TicketRecognizer ticketRecognizer) {
 		super(stationDAO, oWTicketDAO, oWTripDAO, fareCalculator, ticketRecognizer);
 		// TODO Auto-generated constructor stub

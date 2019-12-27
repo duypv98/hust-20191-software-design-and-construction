@@ -31,9 +31,9 @@ import vn.edu.hust.soict.afc.utils.NumberRound;
  * @lecturer Nguyen Thi Thu Trang
  * @class 111589
  */
-public class PPCardServiceImpl extends ItemService {
+public class PPCardService extends ItemService {
 
-	public PPCardServiceImpl(StationDAO stationDAO, PPCardDAO pPCardDAO, PPTripDAO pPTripDAO,
+	public PPCardService(StationDAO stationDAO, PPCardDAO pPCardDAO, PPTripDAO pPTripDAO,
 			FareCalculator fareCalculator, CardScanner cardScanner) {
 		super(stationDAO, pPCardDAO, pPTripDAO, fareCalculator, cardScanner);
 	}
